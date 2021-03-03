@@ -25,6 +25,8 @@ public class Forest {
                 System.out.println(string);
 
         }
+        
+        br.close();
     }
 
     public static double distance(Tree A, Tree B) {

@@ -1,13 +1,26 @@
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
 import static java.lang.Math.*;
 
 public class Forest {
     static List<Tree> forest = new ArrayList<>();
 
+    public Forest() {
+        for(int i = 0; i < 20; i++){
+            Random rand = new Random();
+            double x = rand.nextInt(10) + rand.nextDouble();
+            double y = rand.nextInt(10) + rand.nextDouble();
+            double z = 0;
+
+            forest.add(new Tree(x, y, z));
+        }
+    }
+
     public static void setForest() throws IOException {
-        File file = new File("forest.txt");
+        File file = new File("./src/forest.txt");
 
         BufferedReader br = null;
         br = new BufferedReader(new FileReader(file));
@@ -25,8 +38,6 @@ public class Forest {
                 System.out.println(string);
 
         }
-        
-        br.close();
     }
 
     public static double distance(Tree A, Tree B) {
@@ -43,14 +54,20 @@ public class Forest {
     }
 
     public static void main(String[] args) throws IOException {
-        setForest();
+        /*setForest();
         for (Tree tree : forest) {
             System.out.println("Tree");
         }
         System.out.println("The data for the first tree is: "+forest.get(0).getX()+forest.get(0).getY()+forest.get(0).getZ());
         System.out.println("The data for the third tree is: "+forest.get(2).getX()+forest.get(2).getY()+forest.get(2).getZ());
-        System.out.println("The distance between these two trees is: "+distance(forest.get(0), forest.get(2)));
+        System.out.println("The distance between these two trees is: "+distance(forest.get(0), forest.get(2)));*/
 
+        Forest forest = new Forest();
+        int i = 0;
+        for(Tree tree : forest.forest) {
+            i++;
+            System.out.println("Tree " + i + "; X: " + tree.getX() + ", Y: " + tree.getY() + ", Z: " + tree.getZ());
+        }
     }
 
 }

@@ -23,3 +23,6 @@
 hs_err_pid*
 .classpath
 .project
+out/*
+.idea/*
+cse326-final-project-treemoval.iml

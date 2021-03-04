@@ -21,7 +21,7 @@ public class Forest {
     }
 
     public void readFromFile() throws IOException {
-        File file = new File("forest.txt");
+        File file = new File("./src/forest.txt");
 
         BufferedReader br = new BufferedReader(new FileReader(file));
 

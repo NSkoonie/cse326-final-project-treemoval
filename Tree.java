@@ -4,6 +4,9 @@
 //
 /**
  * The Tree class holds euclidean coordinates for the location of a tree along with various helper functions.
+ *
+ * @author Garrett Evans
+ * @version 1.1
  */
 public class Tree {
 

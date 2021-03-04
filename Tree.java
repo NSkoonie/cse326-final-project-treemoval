@@ -23,4 +23,9 @@ public class Tree {
     }
 
     public int getCut() {return cut;}
+
+    @Override
+    public String toString() {
+        return String.format("x: " + getX() + "y: " + getY() + "z: " + getZ());
+    }
 }

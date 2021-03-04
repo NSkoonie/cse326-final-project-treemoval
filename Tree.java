@@ -7,16 +7,21 @@ public class Tree {
     public double getX() {
         return x;
     }
+    public void setX(double x) { this.x = x; }
 
-    public double getY() {
-        return y;
+    public double getY() { return y; }
+    public void setY(double y) { this.y = y; }
+
+    public double getZ() { return z; }
+    public void setZ(double z) { this.z = z; }
+
+    public Tree() {
+        this.x = 0;
+        this.y = 0;
+        this.z = 0;
     }
 
-    public double getZ() {
-        return z;
-    }
-
-    public Tree(int x, int y, int z) {
+    public Tree(double x, double y, double z) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -26,6 +31,6 @@ public class Tree {
 
     @Override
     public String toString() {
-        return String.format("x: " + getX() + "y: " + getY() + "z: " + getZ());
+        return String.format("x: " + getX() + ", y: " + getY() + ", z: " + getZ());
     }
 }

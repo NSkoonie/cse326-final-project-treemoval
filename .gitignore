@@ -26,3 +26,4 @@ hs_err_pid*
 out/*
 .idea/*
 cse326-final-project-treemoval.iml
+.DS_Store

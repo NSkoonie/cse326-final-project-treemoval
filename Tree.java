@@ -34,7 +34,7 @@ public class Tree {
     /**
      * This constructor instantiates a new tree with specified coordinates.
      *
-     * @todo can we use default parameter values here?
+     * todo can we use default parameter values here?
      *
      * @param x the x coordinate of the tree
      * @param y the y coordinate of the tree
@@ -56,7 +56,7 @@ public class Tree {
      */
     @Override
     public String toString() {
-        return String.format("x: " + getX() + ", y: " + getY() + ", z: " + getZ());
+        return "x: " + getX() + ", y: " + getY() + ", z: " + getZ();
     }
 
     //--------------------------------------------------------------------------------------------------

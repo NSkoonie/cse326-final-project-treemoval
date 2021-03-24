@@ -27,7 +27,7 @@ public class Forest {
     /**
      * The default constructor currently instantiates with 20 randomly positioned trees.
      *
-     * @todo the default constructor should create an empty forest, and another method should
+     * todo the default constructor should create an empty forest, and another method should
      *      be created to add random trees to it. Alternatively, we can overload the constructor
      *      to take in the number of trees and other parameters for a random forest.
      */
@@ -104,7 +104,7 @@ public class Forest {
     /**
      * Returns the tree at a specified index in the forest.
      *
-     * @todo should handle out of bounds indexing without crashing
+     * todo should handle out of bounds indexing without crashing
      *
      * @param x the index value of the desired tree
      * @return the Tree object, if found.
@@ -135,10 +135,10 @@ public class Forest {
      * Simple forest testing; instantiates and prints a random forest, then clears the forest
      * and reads data from a file to print to console as well.
      *
-     * @todo Should be tested with JUnit testing instead of using main function.
+     * todo Should be tested with JUnit testing instead of using main function
      *
      * @param args none
-     * @throws IOException
+     * @throws IOException throws exception if file is not found
      */
     public static void main(String[] args) throws IOException {
 

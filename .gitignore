@@ -22,8 +22,17 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 out/*
-.idea/*
+
+# ignore everything in the .idea folder except the gradle run configurations
+/.idea/*
+!/.idea/runConfigurations
+
+# ignore the intelliJ project file
 *.iml
+
+# ignore stupid mac file
 .DS_Store
+
 .gradle/*
 build/*
+!libs/*

@@ -1,6 +1,7 @@
 plugins {
-  id 'application'
-  id 'org.openjfx.javafxplugin' version '0.0.8'
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.8'
+    id 'java'
 }
 
 repositories {
@@ -16,4 +17,14 @@ javafx {
     modules = [ 'javafx.controls', 'javafx.fxml' ]
 }
 
-mainClassName = 'com.treemoval.visualizer.SampleForestVisualizerApp'
+mainClassName = 'com.treemoval.data.Forest'
+
+// Gradle tasks for running non-main classes
+
+
+task(runSampleVis, dependsOn: 'classes', type: JavaExec) {
+    main = 'com.treemoval.visualizer.SampleForestVisualizerApp'
+    classpath = sourceSets.main.runtimeClasspath
+    // args 'helloWorld'
+}
+

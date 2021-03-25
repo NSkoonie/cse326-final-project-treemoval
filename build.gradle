@@ -17,10 +17,9 @@ javafx {
     modules = [ 'javafx.controls', 'javafx.fxml' ]
 }
 
-mainClassName = 'com.treemoval.data.Forest'
+mainClassName = 'com.treemoval.gui.Main'
 
 // Gradle tasks for running non-main classes
-
 
 task(runSampleVis, dependsOn: 'classes', type: JavaExec) {
     main = 'com.treemoval.visualizer.SampleForestVisualizerApp'

@@ -23,4 +23,5 @@
 hs_err_pid*
 out/*
 .idea/*
-JavaFX-Testing.iml
+*.iml
+.DS_Store

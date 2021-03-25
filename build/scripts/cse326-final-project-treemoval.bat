@@ -86,7 +86,7 @@ set CLASSPATH=%APP_HOME%\lib\cse326-final-project-treemoval.jar;%APP_HOME%\lib\j
 
 
 @rem Execute cse326-final-project-treemoval
-"%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %CSE326_FINAL_PROJECT_TREEMOVAL_OPTS%  -classpath "%CLASSPATH%" com.treemoval.visualizer.JavaFXSampleApp %CMD_LINE_ARGS%
+"%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %CSE326_FINAL_PROJECT_TREEMOVAL_OPTS%  -classpath "%CLASSPATH%" com.treemoval.gui.Main %CMD_LINE_ARGS%
 
 :end
 @rem End local scope for the variables with windows NT shell

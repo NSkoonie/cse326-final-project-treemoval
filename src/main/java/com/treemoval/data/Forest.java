@@ -1,9 +1,8 @@
 package com.treemoval.data;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+
 import static java.lang.Math.*;
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -22,6 +21,7 @@ import static java.lang.Math.*;
 public class Forest {
 
     List<Tree> trees = new ArrayList<>();
+    private double safeDistance = 5; //need to implement way for user to modify
 
     //--------------------------------------------------------------------------------------------------
     // Forest::Forest
@@ -131,6 +131,47 @@ public class Forest {
     }
 
     //--------------------------------------------------------------------------------------------------
+    // Forest::thinningAlgorithm
+    //
+    /**
+     * The algorithm that goes through the forest and marks each tree to be cut or not. It begins by selecting the first
+     * tree in the forest as the "currentTree", and marks it to not be cut. Then the distance to every tree in the
+     * forest is calculated, then sorted by distance (closest to furthest). Then, the algorithm goes through each tree.
+     * If the tree has not been marked yet and it is within the "safeDistance", it gets marked for removal. If the
+     * tree has not been marked and it is outside the safeDistance, then it is marked to not be cut down,
+     * and is then marked as the new "currentTree" since it is the closest tree at a safe distance.
+     * The loop ends. If the # of marked trees is not equal to the # of total trees then the process begins again.
+     *
+     * @todo it might be able to be more efficient but it would be a lot of work for little return
+     * */
+    public void thinningAlgorithm() {
+        int marked = 1; //# of trees marked to be cut or not
+        int treeNum = this.trees.size(); //total # of trees
+        Tree currentTree = this.getTree(0);
+        currentTree.setCut(0);
+
+        while (marked < treeNum) {
+            for (Tree tmpTree : this.trees) {
+                tmpTree.setDist(distance(currentTree, tmpTree));
+            }
+
+            Collections.sort(this.trees, new SortByDist()); //sort by closest to furthest distance
+
+            for (Tree tmpTree : this.trees) {
+                if (tmpTree.getDist() < safeDistance && tmpTree.getCut() == -1) {
+                    tmpTree.setCut(1); //to be cut!
+                    marked++;
+                } else if (tmpTree.getDist() >= safeDistance && tmpTree.getCut() == -1) {
+                    currentTree = tmpTree;
+                    currentTree.setCut(0);//don't cut
+                    marked++;
+                    break;
+                }
+            }
+        }
+    }
+
+    //--------------------------------------------------------------------------------------------------
     // Forest::main
     //
     /**
@@ -147,7 +188,8 @@ public class Forest {
         forest.listTrees();
         System.out.println("The distance between the first two trees is: " +
                 distance(forest.getTree(0), forest.getTree(1)) + "\n");
-
+        forest.thinningAlgorithm();
+        forest.listTrees();
 
         try {
 

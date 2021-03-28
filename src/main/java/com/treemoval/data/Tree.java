@@ -15,6 +15,7 @@ public class Tree {
     private double y;
     private double z;
     private int cut = -1;   // todo this should be an enum
+    private double dist;
 
 
     //--------------------------------------------------------------------------------------------------
@@ -57,7 +58,7 @@ public class Tree {
      */
     @Override
     public String toString() {
-        return "x: " + getX() + ", y: " + getY() + ", z: " + getZ();
+        return "x: " + getX() + ", y: " + getY() + ", z: " + getZ() + ", cut: " + getCut();
     }
 
     //--------------------------------------------------------------------------------------------------
@@ -74,5 +75,9 @@ public class Tree {
     public void setZ(double z) { this.z = z; }
 
     public int getCut() {return cut;}
+    public void setCut(int cut) {this.cut = cut;}
+
+    public double getDist() {return this.dist;}
+    public void setDist(double dist) {this.dist = dist;}
 
 }

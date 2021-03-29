@@ -2,48 +2,28 @@ package com.treemoval.gui;
 
 import com.treemoval.visualizer.ForestGroup;
 import com.treemoval.visualizer.ForestScene;
-import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
-import javafx.animation.Timeline;
 import javafx.fxml.FXML;
-import javafx.scene.Group;
-import javafx.scene.PerspectiveCamera;
-import javafx.scene.SubScene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.PhongMaterial;
-import javafx.scene.shape.Box;
-import javafx.scene.transform.Rotate;
-import javafx.scene.transform.Translate;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
-import javafx.util.Duration;
 
 import java.io.File;
 
 public class TreemovalController {
 
     @FXML
+    private BorderPane borderPane;
+    @FXML
     private TextField filepathTextField;
     @FXML
     private Button exitButton;
     @FXML
-    private Button forestGenerationButton;
-    @FXML
-    private Button runAlgorithmButton;
-    @FXML
-    private Button visualizerStartButton;
-    @FXML
-    private Button exportButton;
-    @FXML
     private ForestScene forestSubScene;
-    @FXML
-    private Button fileFinderButton;
 
     @FXML
     public void initialize() {
@@ -51,6 +31,9 @@ public class TreemovalController {
         ForestGroup forest = new ForestGroup();
 
         forestSubScene.init(forest);
+
+        forestSubScene.heightProperty().bind(borderPane.heightProperty());
+        forestSubScene.widthProperty().bind(borderPane.widthProperty());
     }
 
     public void filePathOnEnter(ActionEvent event) { // todo setFocus

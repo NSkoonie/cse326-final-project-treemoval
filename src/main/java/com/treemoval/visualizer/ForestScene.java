@@ -10,7 +10,11 @@ import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 
 /**
+ * The ForestScene class displays a forest group
  *
+ * todo should the ForestGroup be added as a child node to root, rather than setting the root to the ForestGroup?
+ *      this way, the camera and axes can exist outside the ForestGroup, and won't have to be recreated when changing
+ *      forests (root member should be final)
  */
 public class ForestScene extends SubScene {
 
@@ -27,7 +31,7 @@ public class ForestScene extends SubScene {
     private static final double CAMERA_FAR_CLIP = 10000.0;
     private static final double AXIS_LENGTH = 250.0;
     private static final double CONTROL_MULTIPLIER = 0.1;
-    private static final double SHIFT_MULTIPLIER = 10.0;
+    private static final double SHIFT_MULTIPLIER = 5.0;
     private static final double MOUSE_SPEED = 0.5;
     private static final double ROTATION_SPEED = 0.3;
     private static final double TRACK_SPEED = 0.6;
@@ -39,12 +43,25 @@ public class ForestScene extends SubScene {
     double mouseDeltaX;
     double mouseDeltaY;
 
-
-    public  ForestScene () {
+    //--------------------------------------------------------------------------------------------------
+    // ForestScene::ForestScene()
+    //
+    /**
+     * instantiates the ForestScene with a placeholder root. The init() function should be called to
+     * complete setup.
+     */
+    public ForestScene () {
         super(new Group(), 1024, 768, true, SceneAntialiasing.BALANCED);
         setFill(Color.LIGHTBLUE);
     }
 
+    //--------------------------------------------------------------------------------------------------
+    // ForestScene::init
+    //
+    /**
+     * initializes the ForestScene with a forest, camera, axes, and mouse and keyboard event handlers
+     * @param forestGroup the forest group to be displayed in the scene
+     */
     public void init(ForestGroup forestGroup) {
         root = forestGroup;
         setRoot(root);
@@ -65,7 +82,6 @@ public class ForestScene extends SubScene {
      *      perhaps a new WorldGroup class, or even in the ForestGroup class?
      */
     private void buildCamera() {
-        System.out.println("buildCamera()");
         root.getChildren().add(cameraXform);
         cameraXform.getChildren().add(cameraXform2);
         cameraXform2.getChildren().add(cameraXform3);
@@ -98,7 +114,6 @@ public class ForestScene extends SubScene {
      *      perhaps a new WorldGroup class, or even in the ForestGroup class?
      */
     private void buildAxes() {
-        System.out.println("buildAxes()");
         final PhongMaterial redMaterial = new PhongMaterial();
         redMaterial.setDiffuseColor(Color.DARKRED);
         redMaterial.setSpecularColor(Color.RED);

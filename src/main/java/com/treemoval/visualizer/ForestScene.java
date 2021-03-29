@@ -12,7 +12,7 @@ import javafx.scene.shape.Box;
 /**
  *
  */
-public class ForestScene extends Scene {
+public class ForestScene extends SubScene {
 
     final Group root;
     final Xform axisGroup = new Xform();
@@ -40,11 +40,13 @@ public class ForestScene extends Scene {
     double mouseDeltaY;
 
 
-    public  ForestScene (final Group root) {
-        super(root, 1024, 768, true, SceneAntialiasing.BALANCED);
+    public  ForestScene () {
+        super(new ForestGroup(), 1024, 768, true, SceneAntialiasing.BALANCED);
+        root = (Group) super.getRoot();
 
-        this.root = root;
+    }
 
+    public void init() {
         buildCamera();
         buildAxes();
         handleMouse();

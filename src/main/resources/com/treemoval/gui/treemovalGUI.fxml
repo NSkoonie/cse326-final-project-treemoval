@@ -10,16 +10,21 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="486.0" prefWidth="898.0" style="-fx-background-color: C9C9C9; -fx-border-color: #000000; -fx-border-width: 5;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.treemoval.gui.TreemovalController">
+<?import com.treemoval.visualizer.ForestScene?>
+<?import com.treemoval.visualizer.ForestGroup?>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="486.0" prefWidth="898.0" style="-fx-background-color: C9C9C9; -fx-border-color: #000000; -fx-border-width: 5;" xmlns="http://javafx.com/javafx/10.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.treemoval.gui.TreemovalController">
    <right>
       <AnchorPane prefHeight="498.0" prefWidth="628.0" BorderPane.alignment="CENTER">
          <children>
-            <SubScene fx:id="forestSubScene" height="411.0" layoutX="50.0" layoutY="33.0" width="572.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="33.0">
+            <ForestScene fx:id="forestSubScene" AnchorPane.leftAnchor="0" AnchorPane.rightAnchor="0" AnchorPane.topAnchor="0" AnchorPane.bottomAnchor="0">
               <root>
-                <Region />
+                <ForestGroup fx:id="forestGroup">
+
+                </ForestGroup>
               </root>
-            </SubScene>
-         </children></AnchorPane>
+            </ForestScene>
+         </children>
+      </AnchorPane>
    </right>
    <center>
       <AnchorPane maxWidth="265.0" minHeight="0.0" prefHeight="476.0" prefWidth="265.0" style="-fx-background-color: #618764; -fx-border-color: #000000; -fx-border-width: 1;" BorderPane.alignment="CENTER_LEFT">

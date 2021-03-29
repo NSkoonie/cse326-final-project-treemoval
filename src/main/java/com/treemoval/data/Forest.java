@@ -79,6 +79,27 @@ public class Forest {
     }
 
     //--------------------------------------------------------------------------------------------------
+    // Forest::exportToFile
+    //
+    /**
+     * Creates a CSV file from a forest. It accepts a string that will be the name of the file. It will automatically
+     * append ".csv" to the exported file, i.e. input "trimmedTrees" will create a file named "trimmedTrees.csv"
+     *
+     * todo
+     *
+     * @param fileName the name the user chooses for the .csv file
+     */
+    public void exportToFile(String fileName) throws IOException {
+        BufferedWriter bw = new BufferedWriter(new FileWriter(fileName + ".csv")); //appends .csv to filename
+
+        for (Tree tree : trees) {
+            bw.write(tree.toString() + "\n"); //added end of line char, remove if \n is added to tree.toString()
+        }
+
+        bw.close();
+    }
+
+    //--------------------------------------------------------------------------------------------------
     // Forest::distance
     //
     /**
@@ -190,6 +211,11 @@ public class Forest {
                 distance(forest.getTree(0), forest.getTree(1)) + "\n");
         forest.thinningAlgorithm();
         forest.listTrees();
+        try {
+            forest.exportToFile("trimmedTrees");
+        } catch (IOException e) {
+            System.out.println("error occurred exporting file.");
+        }
 
         try {
 

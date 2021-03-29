@@ -43,22 +43,14 @@ public class TreemovalController {
     @FXML
     private ForestScene forestSubScene;
     @FXML
-    private ForestGroup forestGroup;
-    @FXML
     private Button fileFinderButton;
-
-    private Box box = new Box();
-    private PerspectiveCamera camera = new PerspectiveCamera(true);
-    private Group group = new Group();
-    final Rotate rx = new Rotate(0, Rotate.X_AXIS);
-    final Rotate ry = new Rotate(0, Rotate.Y_AXIS);
-    final Rotate rz = new Rotate(0, Rotate.Z_AXIS);
-    private Timeline animation;
 
     @FXML
     public void initialize() {
-        forestSubScene.init();
-        forestSubScene.setFill(Color.AQUA);
+
+        ForestGroup forest = new ForestGroup();
+
+        forestSubScene.init(forest);
     }
 
     public void filePathOnEnter(ActionEvent event) { // todo setFocus

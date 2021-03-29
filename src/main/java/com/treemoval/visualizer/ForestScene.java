@@ -14,7 +14,7 @@ import javafx.scene.shape.Box;
  */
 public class ForestScene extends SubScene {
 
-    final Group root;
+    Group root;
     final Xform axisGroup = new Xform();
     final PerspectiveCamera camera = new PerspectiveCamera(true);
     final Xform cameraXform = new Xform();
@@ -41,12 +41,14 @@ public class ForestScene extends SubScene {
 
 
     public  ForestScene () {
-        super(new ForestGroup(), 1024, 768, true, SceneAntialiasing.BALANCED);
-        root = (Group) super.getRoot();
-
+        super(new Group(), 1024, 768, true, SceneAntialiasing.BALANCED);
+        setFill(Color.LIGHTBLUE);
     }
 
-    public void init() {
+    public void init(ForestGroup forestGroup) {
+        root = forestGroup;
+        setRoot(root);
+
         buildCamera();
         buildAxes();
         handleMouse();

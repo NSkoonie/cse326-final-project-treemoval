@@ -33,7 +33,6 @@ public class SampleForestVisualizerApp extends Application {
         ForestGroup forest = new ForestGroup();
 
         //ForestScene scene = new ForestScene(forest);
-        //scene.setFill(Color.LIGHTBLUE);
 
         primaryStage.setTitle("JavaFX Sample Application");
         //primaryStage.setScene(scene);

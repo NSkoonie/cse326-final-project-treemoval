@@ -21,9 +21,11 @@ mainClassName = 'com.treemoval.gui.Main'
 
 // Gradle tasks for running non-main classes
 
-task(runSampleVis, dependsOn: 'classes', type: JavaExec) {
+task runSampleVis(type: JavaExec) {
+    dependsOn classes
     main = 'com.treemoval.visualizer.SampleForestVisualizerApp'
     classpath = sourceSets.main.runtimeClasspath
-    // args 'helloWorld'
+    jvmArgs = ['--module-path', classpath.asPath,
+               '--add-modules', 'javafx.controls' ]
 }
 

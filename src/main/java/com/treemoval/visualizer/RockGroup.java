@@ -19,8 +19,8 @@ public class RockGroup extends Group {
      */
     public RockGroup () {
 
-        Group rockModels = ModelLoader.loadModel(
-                RockGroup.class.getClassLoader().getResource("com/treemoval/visualizer/RockPackByPava.obj"));
+        Group rockModels = new Group(); // = ModelLoader.loadModel(
+        //        RockGroup.class.getClassLoader().getResource("com/treemoval/visualizer/RockPackByPava.obj"));
 
         int r1 = ThreadLocalRandom.current().nextInt(0, NUMBER_OF_ROCK_MODELS); // exclusive of upper bound
         int r2 = (r1 + 1) % NUMBER_OF_ROCK_MODELS;

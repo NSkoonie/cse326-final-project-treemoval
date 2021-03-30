@@ -1,5 +1,6 @@
 package com.treemoval.visualizer;
 
+import javafx.fxml.FXMLLoader;
 import javafx.scene.DepthTest;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
@@ -7,6 +8,7 @@ import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.MeshView;
 import javafx.scene.transform.Rotate;
 
+import java.io.IOException;
 import java.util.concurrent.ThreadLocalRandom;
 
 //--------------------------------------------------------------------------------------------------
@@ -28,9 +30,13 @@ public class TreeGroup extends Group {
      */
     public TreeGroup() {
 
-        getChildren().addAll(
-                ModelLoader.loadModel(getClass().getResource("lowpolytree.obj"))
-                        .getChildren());
+        try {
+            getChildren().addAll(
+                    ((Group) FXMLLoader.load(getClass().getResource("tree.fxml"))).getChildren()
+            );
+        } catch (IOException e) {
+            System.out.println("tree.fxml resource file not found.");
+        }
 
         setRotationAxis(Rotate.Z_AXIS);
         setRotate(180.0);
@@ -40,15 +46,6 @@ public class TreeGroup extends Group {
         setTranslateY(30);
         setTranslateX(ThreadLocalRandom.current().nextInt(5, 2990));
         setTranslateZ(ThreadLocalRandom.current().nextInt(5, 2990));
-
-        final PhongMaterial leavesMaterial = new PhongMaterial();
-        //leavesMaterial.setDiffuseColor(Color.GREEN);
-        leavesMaterial.setDiffuseColor(Color.web("0x056307"));
-        leavesMaterial.setSpecularColor(Color.BLACK);
-        leavesMaterial.setSpecularPower(1000);
-
-        MeshView leaves = (MeshView) getChildren().get(0);
-        leaves.setMaterial(leavesMaterial);
 
         setDepthTest(DepthTest.ENABLE);
 
@@ -64,7 +61,7 @@ public class TreeGroup extends Group {
     public void makeRed() {
 
         MeshView leaves = (MeshView) getChildren().get(0);
-        if(!leaves.getId().equals("Cylinder_Leaves")) { return; }
+        if(!leaves.getId().equals("leaves")) { return; }
 
         final PhongMaterial redMaterial = new PhongMaterial();
         redMaterial.setDiffuseColor(Color.DARKRED);

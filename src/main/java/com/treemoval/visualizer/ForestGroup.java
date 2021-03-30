@@ -46,8 +46,8 @@ public class ForestGroup extends Group {
         tree.makeRed();
         allTrees.getChildren().addAll(tree);
 
-        RockGroup rocks = new RockGroup();
-        getChildren().add(rocks);
+        //RockGroup rocks = new RockGroup();
+        //getChildren().add(rocks);
 
     }
 

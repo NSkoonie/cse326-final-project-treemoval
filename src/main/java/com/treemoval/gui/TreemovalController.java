@@ -29,7 +29,7 @@ public class TreemovalController {
     @FXML
     public void initialize() {
 
-        Forest forest = new Forest();
+        Forest forest = new Forest(2000, 3000);
         ForestGroup forestGroup = new ForestGroup(forest);
 
         forestSubScene.init(forestGroup);

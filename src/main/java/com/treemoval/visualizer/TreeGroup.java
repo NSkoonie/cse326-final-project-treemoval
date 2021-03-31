@@ -20,6 +20,8 @@ import java.io.IOException;
  */
 public class TreeGroup extends Group {
 
+    private final double TREE_Y_OFFSET = 30;
+
     //--------------------------------------------------------------------------------------------------
     // TreeGroup::TreeGroup
     //
@@ -55,7 +57,7 @@ public class TreeGroup extends Group {
         setScaleZ(10.0);
 
         setTranslateX(pX);
-        setTranslateY(pY);
+        setTranslateY(TREE_Y_OFFSET + pY);
         setTranslateZ(pZ);
 
         setDepthTest(DepthTest.ENABLE);

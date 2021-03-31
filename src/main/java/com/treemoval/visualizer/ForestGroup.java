@@ -4,6 +4,7 @@ package com.treemoval.visualizer;
 //
 
 import com.treemoval.data.Forest;
+import com.treemoval.data.Tags;
 import com.treemoval.data.Tree;
 import javafx.scene.AmbientLight;
 import javafx.scene.Group;
@@ -16,10 +17,15 @@ import javafx.scene.paint.PhongMaterial;
  */
 public class ForestGroup extends Group {
 
+    Group redTrees;
+
     public ForestGroup(Forest forest) {
 
         // build the ground
-        GroundMesh groundMesh = new GroundMesh(300, 300);
+        int xSize = (int)( forest.getMaxX() / 10.0) + 14;
+        int zSize = (int)(forest.getMaxZ() / 10.0) + 14;
+        System.out.println("xSize: " + xSize + " zSize: " + zSize);
+        GroundMesh groundMesh = new GroundMesh( xSize, zSize );
         getChildren().add(groundMesh);
 
         AmbientLight ambientGroundLight = new AmbientLight();
@@ -27,10 +33,13 @@ public class ForestGroup extends Group {
         ambientGroundLight.getScope().add(groundMesh);
         getChildren().add(ambientGroundLight);
 
-
         // build the trees
         Group allTrees = new Group();
         getChildren().add(allTrees);
+        allTrees.setTranslateX(70);
+        allTrees.setTranslateZ(70);
+
+        redTrees = new Group();
 
         AmbientLight ambientTreeLight = new AmbientLight();
         ambientTreeLight.setColor(Color.rgb(90, 90, 90, 1));
@@ -38,7 +47,12 @@ public class ForestGroup extends Group {
         getChildren().add(ambientTreeLight);
 
         for(Tree tree : forest.trees) {
-            allTrees.getChildren().addAll(new TreeGroup(tree.getX(), tree.getY(), tree.getZ()));
+            TreeGroup treeGroup = new TreeGroup(tree.getX(), tree.getY(), tree.getZ());
+            if(tree.getTag() == Tags.CUT) {
+                treeGroup.makeRed();
+                redTrees.getChildren().add(treeGroup);
+            }
+            allTrees.getChildren().add(treeGroup);
         }
 
         TreeGroup tree = new TreeGroup();
@@ -51,6 +65,20 @@ public class ForestGroup extends Group {
         //RockGroup rocks = new RockGroup();
         //getChildren().add(rocks);
 
+    }
+
+    //--------------------------------------------------------------------------------------------------
+    // ForestGroup::hideRedTrees
+    //
+    public void hideRedTrees() {
+        redTrees.setVisible(false);
+    }
+
+    //--------------------------------------------------------------------------------------------------
+    // ForestGroup::hideRedTrees
+    //
+    public void showRedTrees() {
+        redTrees.setVisible(true);
     }
 
 }

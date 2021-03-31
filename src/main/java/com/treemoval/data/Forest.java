@@ -22,9 +22,6 @@ import static java.lang.Math.*;
 public class Forest {
 
     public List<Tree> trees = new ArrayList<>(); // todo should probably be private
-    private double safeDistance = 5; //todo need to implement way for user to modify
-                                    // note from nps: this should be passed in to the thinning algorithm
-                                    //      (it will be retrieved as a value from the gui)
   
     private double minX = 0;
     private double maxX = 0;
@@ -38,6 +35,22 @@ public class Forest {
      * The default constructor leaves the ArrayList empty
      */
     public Forest() {
+
+    }
+
+    //--------------------------------------------------------------------------------------------------
+    // Forest::Forest
+    //
+    /**
+     * copy constructor
+     */
+    public Forest(Forest forestToCopy) {
+
+        this.trees = new ArrayList<>(forestToCopy.trees);
+        this.minX = forestToCopy.getMinX();
+        this.maxX = forestToCopy.getMaxX();
+        this.minZ = forestToCopy.getMinZ();
+        this.maxZ = forestToCopy.getMaxZ();
 
     }
 
@@ -226,9 +239,26 @@ public class Forest {
             if (tree.getZ() > maxZ)
                 maxZ = tree.getZ();
         }
+        System.out.println("Update bounds: ");
     }
 
-    // Forest::thinningAlgorithm
+    //--------------------------------------------------------------------------------------------------
+    // Forest::runThinningAlgorithmNewForest
+    //
+    /**
+     * creates a new forest to run the thinning algorithm on, and returns it
+     * @return the thinned forest
+     */
+    public Forest runThinningAlgorithmNewForest (double safeDistance) {
+
+        Forest thinnedForest = new Forest(this);
+        thinnedForest.runThinningAlgorithm(safeDistance);
+        return thinnedForest;
+
+    }
+
+    //--------------------------------------------------------------------------------------------------
+    // Forest::runThinningAlgorithm
     //
     /**
      * The algorithm that goes through the forest and marks each tree to be cut or not. It begins by selecting the first
@@ -241,7 +271,10 @@ public class Forest {
      *
      * todo it might be able to be more efficient but it would be a lot of work for little return
      * */
-    public void thinningAlgorithm() {
+    public void runThinningAlgorithm(double safeDistance) {
+
+
+
         int marked = 1; //# of trees marked to be cut or not
         int treeNum = this.trees.size(); //total # of trees
         Tree currentTree = this.getTree(0);
@@ -255,6 +288,7 @@ public class Forest {
             this.trees.sort(new SortByDist()); //sort by closest to furthest distance
 
             for (Tree tmpTree : this.trees) {
+
                 if (tmpTree.getDist() < safeDistance && tmpTree.getTag() == UNMARKED) {
                     tmpTree.setTag(CUT); //to be cut!
                     marked++;
@@ -267,6 +301,18 @@ public class Forest {
             }
         }
     }
+
+    //--------------------------------------------------------------------------------------------------
+    // Forest:: Getters and Setters
+    //
+
+    public double getMinX() { return minX; }
+
+    public double getMaxX() { return maxX; }
+
+    public double getMinZ() { return minZ; }
+
+    public double getMaxZ() { return maxZ; }
 
     //--------------------------------------------------------------------------------------------------
     // Forest::main
@@ -293,7 +339,7 @@ public class Forest {
         System.out.println("The distance between the first two trees is: " +
                 distance(forest.getTree(0), forest.getTree(1)) + "\n");
 
-        forest.thinningAlgorithm();
+        forest.runThinningAlgorithm(5);
         forest.listTrees();
 
         String export = "forest3_export.csv";

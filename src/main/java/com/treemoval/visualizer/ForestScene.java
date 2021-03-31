@@ -18,7 +18,7 @@ import javafx.scene.shape.Box;
  */
 public class ForestScene extends SubScene {
 
-    Group root;
+    final Group root = new Group();
     final Xform axisGroup = new Xform();
     final PerspectiveCamera camera = new PerspectiveCamera(true);
     final Xform cameraXform = new Xform();
@@ -63,13 +63,14 @@ public class ForestScene extends SubScene {
      * @param forestGroup the forest group to be displayed in the scene
      */
     public void init(ForestGroup forestGroup) {
-        root = forestGroup;
+
         setRoot(root);
 
         buildCamera();
         buildAxes();
         handleMouse();
         handleKeyboard();
+
     }
 
     //--------------------------------------------------------------------------------------------------
@@ -101,6 +102,22 @@ public class ForestScene extends SubScene {
 
         setCamera(camera);
 
+    }
+
+    //--------------------------------------------------------------------------------------------------
+    // ForestScene::setForestGroup
+    //
+    /**
+     * changes the forest displayed in the subscene
+     *
+     *  todo should we reset the camera position here? or in another function?
+     *
+     * @param forestGroup the ForestGroup to be displayed within the scene
+     */
+    public void setForestGroup(ForestGroup forestGroup) {
+        root.getChildren().remove(root.lookup("#forest"));
+        forestGroup.setId("forest");
+        root.getChildren().add(forestGroup);
     }
 
     //--------------------------------------------------------------------------------------------------

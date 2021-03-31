@@ -3,6 +3,7 @@ package com.treemoval.gui;
 import com.treemoval.data.Forest;
 import com.treemoval.visualizer.ForestGroup;
 import com.treemoval.visualizer.ForestScene;
+import com.treemoval.data.Forest;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -52,6 +53,8 @@ public class TreemovalController {
     public void setCurrentforest(Forest forest) {
         this.currentForest = forest;
     }
+    @FXML
+    private Button forestGenerationButton;
 
     @FXML
     public void initialize() {
@@ -238,6 +241,7 @@ public class TreemovalController {
         currentForest.listTrees();
         currentForest.thinningAlgorithm();
         loadForest(currentForest);
+
 
     }
 }

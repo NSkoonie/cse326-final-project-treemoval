@@ -3,6 +3,8 @@ package com.treemoval.visualizer;
 // ::ForestBuilder
 //
 
+import com.treemoval.data.Forest;
+import com.treemoval.data.Tree;
 import javafx.scene.AmbientLight;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
@@ -14,7 +16,7 @@ import javafx.scene.paint.PhongMaterial;
  */
 public class ForestGroup extends Group {
 
-    public ForestGroup() {
+    public ForestGroup(Forest forest) {
 
         // build the ground
         GroundMesh groundMesh = new GroundMesh(300, 300);
@@ -35,8 +37,8 @@ public class ForestGroup extends Group {
         ambientTreeLight.getScope().add(allTrees);
         getChildren().add(ambientTreeLight);
 
-        for(int i = 0; i < 2000; i++) {
-            allTrees.getChildren().addAll(new TreeGroup());
+        for(Tree tree : forest.trees) {
+            allTrees.getChildren().addAll(new TreeGroup(tree.getX(), tree.getY(), tree.getZ()));
         }
 
         TreeGroup tree = new TreeGroup();

@@ -21,8 +21,10 @@ import static java.lang.Math.*;
  */
 public class Forest {
 
-    List<Tree> trees = new ArrayList<>();
+    public List<Tree> trees = new ArrayList<>(); // todo should probably be private
     private double safeDistance = 5; //todo need to implement way for user to modify
+                                    // note from nps: this should be passed in to the thinning algorithm
+                                    //      (it will be retrieved as a value from the gui)
 
     //--------------------------------------------------------------------------------------------------
     // Forest::Forest

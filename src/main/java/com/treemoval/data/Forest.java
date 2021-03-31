@@ -3,6 +3,7 @@ package com.treemoval.data;
 import java.io.*;
 import java.util.*;
 
+import static com.treemoval.data.Tags.*;
 import static java.lang.Math.*;
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -21,7 +22,7 @@ import static java.lang.Math.*;
 public class Forest {
 
     List<Tree> trees = new ArrayList<>();
-    private double safeDistance = 5; //need to implement way for user to modify
+    private double safeDistance = 5; //todo need to implement way for user to modify
 
     //--------------------------------------------------------------------------------------------------
     // Forest::Forest
@@ -76,27 +77,6 @@ public class Forest {
         }
 
         br.close();
-    }
-
-    //--------------------------------------------------------------------------------------------------
-    // Forest::exportToFile
-    //
-    /**
-     * Creates a CSV file from a forest. It accepts a string that will be the name of the file. It will automatically
-     * append ".csv" to the exported file, i.e. input "trimmedTrees" will create a file named "trimmedTrees.csv"
-     *
-     * todo
-     *
-     * @param fileName the name the user chooses for the .csv file
-     */
-    public void exportToFile(String fileName) throws IOException {
-        BufferedWriter bw = new BufferedWriter(new FileWriter(fileName + ".csv")); //appends .csv to filename
-
-        for (Tree tree : trees) {
-            bw.write(tree.toString() + "\n"); //added end of line char, remove if \n is added to tree.toString()
-        }
-
-        bw.close();
     }
 
     //--------------------------------------------------------------------------------------------------
@@ -169,7 +149,7 @@ public class Forest {
         int marked = 1; //# of trees marked to be cut or not
         int treeNum = this.trees.size(); //total # of trees
         Tree currentTree = this.getTree(0);
-        currentTree.setCut(0);
+        currentTree.setTag(SAFE);
 
         while (marked < treeNum) {
             for (Tree tmpTree : this.trees) {
@@ -179,12 +159,12 @@ public class Forest {
             Collections.sort(this.trees, new SortByDist()); //sort by closest to furthest distance
 
             for (Tree tmpTree : this.trees) {
-                if (tmpTree.getDist() < safeDistance && tmpTree.getCut() == -1) {
-                    tmpTree.setCut(1); //to be cut!
+                if (tmpTree.getDist() < safeDistance && tmpTree.getTag() == UNMARKED) {
+                    tmpTree.setTag(CUT); //to be cut!
                     marked++;
-                } else if (tmpTree.getDist() >= safeDistance && tmpTree.getCut() == -1) {
+                } else if (tmpTree.getDist() >= safeDistance && tmpTree.getTag() == UNMARKED) {
                     currentTree = tmpTree;
-                    currentTree.setCut(0);//don't cut
+                    currentTree.setTag(SAFE);//don't cut
                     marked++;
                     break;
                 }
@@ -211,12 +191,7 @@ public class Forest {
                 distance(forest.getTree(0), forest.getTree(1)) + "\n");
         forest.thinningAlgorithm();
         forest.listTrees();
-        try {
-            forest.exportToFile("trimmedTrees");
-        } catch (IOException e) {
-            System.out.println("error occurred exporting file.");
-        }
-
+        
         try {
 
             forest.readFromFile("forest.txt");

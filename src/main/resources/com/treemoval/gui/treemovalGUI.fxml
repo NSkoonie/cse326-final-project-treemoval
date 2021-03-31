@@ -9,15 +9,12 @@
 <?import javafx.scene.text.Font?>
 
 <?import com.treemoval.visualizer.ForestScene?>
-<?import com.treemoval.visualizer.ForestGroup?>
+
+<?import javafx.scene.Group?>
 
 <BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="486.0" prefWidth="898.0" style="-fx-background-color: C9C9C9; -fx-border-color: #000000; -fx-border-width: 0;" xmlns="http://javafx.com/javafx/10.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.treemoval.gui.TreemovalController">
    <center>
-      <ForestScene fx:id="forestSubScene">
-        <root>
-          <ForestGroup />
-        </root>
-      </ForestScene>
+      <ForestScene fx:id="forestSubScene" />
    </center>
    <right>
       <AnchorPane maxWidth="265.0" minHeight="0.0"  prefWidth="265.0" style="-fx-background-color: #618764; -fx-border-color: #000000; -fx-border-width: 1;" BorderPane.alignment="CENTER_RIGHT">

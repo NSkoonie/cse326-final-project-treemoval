@@ -21,42 +21,31 @@ import static java.lang.Math.*;
  */
 public class Forest {
 
-    List<Tree> trees = new ArrayList<>();
+    List<Tree> trees;
 
     //--------------------------------------------------------------------------------------------------
     // Forest::Forest
     //
     /**
-     * The default constructor currently instantiates with 20 randomly positioned trees.
-     * The area of the forest is limited to 10 by 10.
-     *
-     * todo the default constructor should create an empty forest, and another method should
-     *      be created to add random trees to it. Alternatively, we can overload the constructor
-     *      to take in the number of trees and other parameters for a random forest.
+     * The default constructor creates an empty ArrayList.
      */
     public Forest() {
-        for(int i = 0; i < 20; i++){
-            Random rand = new Random();
-            double x = rand.nextInt(10) + rand.nextDouble();
-            double y = rand.nextInt(10) + rand.nextDouble();
-            double z = 0;
-
-            this.trees.add(new Tree(x, y, z));
-        }
+        this.trees = new ArrayList<>();
     }
 
     /**
      * The constructor currently instantiates with user defined number of trees and area of forest.
      *
      * @param num_trees the number of trees in the forest
-     * @param forest_area the bounds for the x and y coordinates (0 inclusive, forest_area exclusive)
+     * @param bound the bounds for the x and y coordinates (0 - inclusive, bound - exclusive)
      */
-    public Forest(int num_trees, int forest_area) {
+    public Forest(int num_trees, int bound) {
+        this.trees = new ArrayList<>();
         for(int i = 0; i < num_trees; i++){
             Random rand = new Random();
-            double x = rand.nextInt(forest_area) + rand.nextDouble();
-            double y = rand.nextInt(forest_area) + rand.nextDouble();
-            double z = 0;
+            double x = rand.nextInt(bound) + rand.nextDouble();
+            double z = rand.nextInt(bound) + rand.nextDouble();
+            double y = 0;
 
             this.trees.add(new Tree(x, y, z));
         }
@@ -86,10 +75,9 @@ public class Forest {
         while ((line = br.readLine()) != null) {
             // System.out.println(line);
             String[] dets = line.split(",");
-            // todo Should this be parsing integers or not?
-            int x = Integer.parseInt(dets[0]);
-            int y = Integer.parseInt(dets[1]);
-            int z = Integer.parseInt(dets[2]);
+            double x = Double.parseDouble(dets[0]);
+            double y = Double.parseDouble(dets[1]);
+            double z = Double.parseDouble(dets[2]);
             this.trees.add(new Tree(x, y, z));
             // for (String string : dets) { System.out.println(string); }
         }
@@ -102,37 +90,40 @@ public class Forest {
     //
     /**
      * Reads tree data from a CSV file and stores it in the forest.
-     *
+     * Returns 0 on success, 1 if file exists, 2 if file extension is incorrect
      * @throws IOException if the CSV file is not found
      */
-    public void exportForest(String fileName) throws IOException {
+    public int exportForest(String fileName) throws IOException {
 
         File file = new File(fileName);
         String line;
 
-        try {
-            if(file.createNewFile()){
-                System.out.println("File created: " + file.getName());
-                FileWriter writer = new FileWriter(fileName);
-                BufferedWriter bw = new BufferedWriter(writer);
-
-                for(Tree tree: this.trees){
-                    line = (int)tree.getX() + "," + (int)tree.getY() + "," + (int)tree.getZ();
-                    bw.write(line);
-                    bw.newLine();
-                }
-
-                bw.close();
-                System.out.println("File writing success.\n");
-
-            } else {
-                System.out.println("File already exists.\n");
-            }
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
+        if(!fileName.substring(fileName.length() - 4).equals(".csv")) {
+            System.out.println("The file name needs to with the .csv file extension.\n");
+            return 2;
         }
 
+
+        if(file.createNewFile()){
+            System.out.println("File created: " + file.getName());
+            FileWriter writer = new FileWriter(fileName);
+            BufferedWriter bw = new BufferedWriter(writer);
+
+            for(Tree tree: this.trees){
+                line = tree.getX() + "," + tree.getY() + "," + tree.getZ();
+                bw.write(line);
+                bw.newLine();
+            }
+
+            bw.close();
+            System.out.println("File writing success.\n");
+
+        } else {
+            System.out.println("File already exists.\n");
+            return 1;
+        }
+
+        return 0;
     }
 
     //--------------------------------------------------------------------------------------------------
@@ -200,7 +191,7 @@ public class Forest {
      */
     public static void main(String[] args) {
 
-        Forest forest = new Forest();
+        Forest forest = new Forest(20, 20);
         Forest new_forest = new Forest(100, 1000);
 
         System.out.println("This is the first forest using the default constructor.");
@@ -212,7 +203,7 @@ public class Forest {
         System.out.println("The distance between the first two trees is: " +
                 distance(forest.getTree(0), forest.getTree(1)) + "\n");
 
-        String export = "forest_export.txt";
+        String export = "forest_export.csv";
         try {
             forest.exportForest(export);
         } catch (IOException e) {
@@ -221,7 +212,8 @@ public class Forest {
 
 
         try {
-            forest.readFromFile("forest_export.txt");
+            forest.readFromFile("forest_export.csv");
+            System.out.println("This is reading from the file forest_export.csv");
             forest.listTrees();
             System.out.println("The distance between the first two trees is: " +
                     distance(forest.getTree(0), forest.getTree(1)) + "\n");

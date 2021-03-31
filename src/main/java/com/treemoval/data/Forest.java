@@ -25,6 +25,11 @@ public class Forest {
     private double safeDistance = 5; //todo need to implement way for user to modify
                                     // note from nps: this should be passed in to the thinning algorithm
                                     //      (it will be retrieved as a value from the gui)
+  
+    private double minX = 0;
+    private double maxX = 0;
+    private double minZ = 0;
+    private double maxZ = 0;
 
     //--------------------------------------------------------------------------------------------------
     // Forest::Forest
@@ -33,6 +38,19 @@ public class Forest {
      * The default constructor leaves the ArrayList empty
      */
     public Forest() {
+
+    }
+
+    //--------------------------------------------------------------------------------------------------
+    // Forest::Forest
+    //
+    /**
+     * This constructor creates a forest from a CSV file
+     */
+    public Forest(String path) {
+
+        readFromFile(path);
+        updateBounds();
 
     }
 
@@ -52,6 +70,7 @@ public class Forest {
 
             this.trees.add(new Tree(x, y, z));
         }
+        updateBounds();
     }
 
     //--------------------------------------------------------------------------------------------------
@@ -66,26 +85,34 @@ public class Forest {
      * @param path the path to the CSV file to be read
      * @throws IOException if the CSV file is not found
      */
-    public void readFromFile(String path) throws IOException {
+    public void readFromFile(String path) {
 
         File file = new File(path);
-        BufferedReader br = new BufferedReader(new FileReader(file));
+        BufferedReader br;
 
-        this.trees.clear();
+        try {
+            br = new BufferedReader(new FileReader(file));
 
-        String line;
+            this.trees.clear();
 
-        while ((line = br.readLine()) != null) {
-            // System.out.println(line);
-            String[] dets = line.split(",");
-            double x = Double.parseDouble(dets[0]);
-            double y = Double.parseDouble(dets[1]);
-            double z = Double.parseDouble(dets[2]);
-            this.trees.add(new Tree(x, y, z));
-            // for (String string : dets) { System.out.println(string); }
+            String line;
+
+            while ((line = br.readLine()) != null) {
+                String[] dets = line.split(",");
+                double x = Double.parseDouble(dets[0]);
+                double y = Double.parseDouble(dets[1]);
+                double z = Double.parseDouble(dets[2]);
+                this.trees.add(new Tree(x, y, z));
+            }
+
+            br.close();
+
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found at location: " + path);
+        } catch (IOException e) {
+            System.out.println("IO exception at location: " + path);
         }
 
-        br.close();
     }
 
     //--------------------------------------------------------------------------------------------------
@@ -182,6 +209,25 @@ public class Forest {
     }
 
     //--------------------------------------------------------------------------------------------------
+    // Forest::updateBounds
+    //
+    /**
+     * Sets the bound for use with the visualizer.
+     */
+    public void updateBounds() {
+        for (Tree tree: trees) {
+            if (tree.getX() < minX)
+                minX = tree.getX();
+            if (tree.getX() > maxX)
+                maxX = tree.getX();
+
+            if (tree.getZ() < minZ)
+                minZ = tree.getZ();
+            if (tree.getZ() > maxZ)
+                maxZ = tree.getZ();
+        }
+    }
+
     // Forest::thinningAlgorithm
     //
     /**
@@ -258,19 +304,13 @@ public class Forest {
             e.printStackTrace();
         }
 
+        forest.readFromFile("forest_export.csv");
+        System.out.println("This is reading from the file forest_export.csv");
+        forest.listTrees();
+        System.out.println("The distance between the first two trees is: " +
+                distance(forest.getTree(0), forest.getTree(1)) + "\n");
 
-        try {
-            forest.readFromFile("forest_export.csv");
-            System.out.println("This is reading from the file forest_export.csv");
-            forest.listTrees();
-            System.out.println("The distance between the first two trees is: " +
-                    distance(forest.getTree(0), forest.getTree(1)) + "\n");
 
-        } catch (IOException e) {
-
-            System.out.println("Sample forest file not found!");
-
-        }
 
     }
 

@@ -1,9 +1,9 @@
 package com.treemoval.data;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+
+import static com.treemoval.data.Tags.*;
 import static java.lang.Math.*;
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -21,26 +21,27 @@ import static java.lang.Math.*;
  */
 public class Forest {
 
-    List<Tree> trees;
+    List<Tree> trees = new ArrayList<>();
+    private double safeDistance = 5; //todo need to implement way for user to modify
 
     //--------------------------------------------------------------------------------------------------
     // Forest::Forest
     //
     /**
-     * The default constructor creates an empty ArrayList.
+     * The default constructor leaves the ArrayList empty
      */
     public Forest() {
-        this.trees = new ArrayList<>();
+
     }
 
     /**
-     * The constructor currently instantiates with user defined number of trees and area of forest.
+     * This constructor instantiates with user defined number of trees and area of forest.
      *
      * @param num_trees the number of trees in the forest
      * @param bound the bounds for the x and y coordinates (0 - inclusive, bound - exclusive)
      */
     public Forest(int num_trees, int bound) {
-        this.trees = new ArrayList<>();
+
         for(int i = 0; i < num_trees; i++){
             Random rand = new Random();
             double x = rand.nextInt(bound) + rand.nextDouble();
@@ -179,6 +180,47 @@ public class Forest {
     }
 
     //--------------------------------------------------------------------------------------------------
+    // Forest::thinningAlgorithm
+    //
+    /**
+     * The algorithm that goes through the forest and marks each tree to be cut or not. It begins by selecting the first
+     * tree in the forest as the "currentTree", and marks it to not be cut. Then the distance to every tree in the
+     * forest is calculated, then sorted by distance (closest to furthest). Then, the algorithm goes through each tree.
+     * If the tree has not been marked yet and it is within the "safeDistance", it gets marked for removal. If the
+     * tree has not been marked and it is outside the safeDistance, then it is marked to not be cut down,
+     * and is then marked as the new "currentTree" since it is the closest tree at a safe distance.
+     * The loop ends. If the # of marked trees is not equal to the # of total trees then the process begins again.
+     *
+     * todo it might be able to be more efficient but it would be a lot of work for little return
+     * */
+    public void thinningAlgorithm() {
+        int marked = 1; //# of trees marked to be cut or not
+        int treeNum = this.trees.size(); //total # of trees
+        Tree currentTree = this.getTree(0);
+        currentTree.setTag(SAFE);
+
+        while (marked < treeNum) {
+            for (Tree tmpTree : this.trees) {
+                tmpTree.setDist(distance(currentTree, tmpTree));
+            }
+
+            this.trees.sort(new SortByDist()); //sort by closest to furthest distance
+
+            for (Tree tmpTree : this.trees) {
+                if (tmpTree.getDist() < safeDistance && tmpTree.getTag() == UNMARKED) {
+                    tmpTree.setTag(CUT); //to be cut!
+                    marked++;
+                } else if (tmpTree.getDist() >= safeDistance && tmpTree.getTag() == UNMARKED) {
+                    currentTree = tmpTree;
+                    currentTree.setTag(SAFE);//don't cut
+                    marked++;
+                    break;
+                }
+            }
+        }
+    }
+
+    //--------------------------------------------------------------------------------------------------
     // Forest::main
     //
     /**
@@ -203,7 +245,11 @@ public class Forest {
         System.out.println("The distance between the first two trees is: " +
                 distance(forest.getTree(0), forest.getTree(1)) + "\n");
 
+        forest.thinningAlgorithm();
+        forest.listTrees();
+
         String export = "forest_export.csv";
+
         try {
             forest.exportForest(export);
         } catch (IOException e) {

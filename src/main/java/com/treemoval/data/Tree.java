@@ -1,5 +1,6 @@
 package com.treemoval.data;
 
+import static com.treemoval.data.Tags.*;
 //----------------------------------------------------------------------------------------------------------------------
 // ::Tree
 //
@@ -14,7 +15,8 @@ public class Tree {
     private double x;
     private double y;
     private double z;
-    private int cut = -1;   // todo this should be an enum
+    private Tags tag = UNMARKED;
+    private double dist;
 
 
     //--------------------------------------------------------------------------------------------------
@@ -57,7 +59,7 @@ public class Tree {
      */
     @Override
     public String toString() {
-        return "x: " + getX() + ", y: " + getY() + ", z: " + getZ();
+        return "x: " + getX() + ", y: " + getY() + ", z: " + getZ() + ", cut: " + getTag();
     }
 
     //--------------------------------------------------------------------------------------------------
@@ -73,6 +75,10 @@ public class Tree {
     public double getZ() { return z; }
     public void setZ(double z) { this.z = z; }
 
-    public int getCut() {return cut;}
+    public Tags getTag() {return tag;}
+    public void setTag(Tags tag) {this.tag = tag;}
+
+    public double getDist() {return this.dist;}
+    public void setDist(double dist) {this.dist = dist;}
 
 }

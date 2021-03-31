@@ -1,28 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.SubScene?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="486.0" prefWidth="898.0" style="-fx-background-color: C9C9C9; -fx-border-color: #000000; -fx-border-width: 5;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.treemoval.gui.TreemovalController">
-   <right>
-      <AnchorPane prefHeight="498.0" prefWidth="628.0" BorderPane.alignment="CENTER">
-         <children>
-            <SubScene fx:id="forestSubScene" height="411.0" layoutX="50.0" layoutY="33.0" width="572.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="33.0">
-              <root>
-                <Region />
-              </root>
-            </SubScene>
-         </children></AnchorPane>
-   </right>
+<?import com.treemoval.visualizer.ForestScene?>
+<?import com.treemoval.visualizer.ForestGroup?>
+
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="486.0" prefWidth="898.0" style="-fx-background-color: C9C9C9; -fx-border-color: #000000; -fx-border-width: 0;" xmlns="http://javafx.com/javafx/10.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.treemoval.gui.TreemovalController">
    <center>
-      <AnchorPane maxWidth="265.0" minHeight="0.0" prefHeight="476.0" prefWidth="265.0" style="-fx-background-color: #618764; -fx-border-color: #000000; -fx-border-width: 1;" BorderPane.alignment="CENTER_LEFT">
+      <ForestScene fx:id="forestSubScene">
+        <root>
+          <ForestGroup />
+        </root>
+      </ForestScene>
+   </center>
+   <right>
+      <AnchorPane maxWidth="265.0" minHeight="0.0"  prefWidth="265.0" style="-fx-background-color: #618764; -fx-border-color: #000000; -fx-border-width: 1;" BorderPane.alignment="CENTER_RIGHT">
          <children>
             <Label layoutX="60.0" layoutY="112.0" prefHeight="17.0" prefWidth="141.0" text="Import Forest Data" textFill="WHITE">
                <font>
@@ -67,5 +65,5 @@
             <Button fx:id="fileFinderButton" layoutX="204.0" layoutY="142.0" mnemonicParsing="false" onAction="#fileFinderButtonOnAction" prefHeight="27.0" prefWidth="32.0" text="...." />
          </children>
       </AnchorPane>
-   </center>
+   </right>
 </BorderPane>

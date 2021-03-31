@@ -16,8 +16,11 @@ public class Main extends Application {
 
 
         Parent root = FXMLLoader.load(getClass().getResource("treemovalGUI.fxml"));
+
+
+
         //primaryStage.initStyle(StageStyle.UNDECORATED);
-        primaryStage.setScene(new Scene(root, 898, 486));
+        primaryStage.setScene(new Scene(root, 1500, 800));
         primaryStage.show();
     }
 

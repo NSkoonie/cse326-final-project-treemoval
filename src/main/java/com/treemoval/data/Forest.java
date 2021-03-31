@@ -21,7 +21,7 @@ import static java.lang.Math.*;
  */
 public class Forest {
 
-    List<Tree> trees = new ArrayList<>();
+    public List<Tree> trees = new ArrayList<>(); // todo should probably be private
 
     //--------------------------------------------------------------------------------------------------
     // Forest::Forest

@@ -281,7 +281,7 @@ public class Forest {
      */
     public static void main(String[] args) {
 
-        Forest forest = new Forest(20, 20);
+        Forest forest = new Forest(1000, 1500);
         Forest new_forest = new Forest(100, 1000);
 
         System.out.println("This is the first forest using the default constructor.");
@@ -296,7 +296,7 @@ public class Forest {
         forest.thinningAlgorithm();
         forest.listTrees();
 
-        String export = "forest_export.csv";
+        String export = "forest3_export.csv";
 
         try {
             forest.exportForest(export);

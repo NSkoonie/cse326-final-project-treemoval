@@ -8,9 +8,8 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<?import com.treemoval.visualizer.ForestScene?>
 
-<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="486.0" prefWidth="898.0" style="-fx-background-color: C9C9C9; -fx-border-color: #000000; -fx-border-width: 0;" xmlns="http://javafx.com/javafx/10.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.treemoval.gui.TreemovalController">
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="486.0" prefWidth="898.0" style="-fx-background-color: C9C9C9; -fx-border-color: #000000; -fx-border-width: 0;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.treemoval.gui.TreemovalController">
    <center>
       <ForestScene fx:id="forestSubScene" />
    </center>
@@ -22,29 +21,24 @@
                   <Font name="PT Sans" size="16.0" />
                </font>
             </Label>
-            <VBox layoutX="24.0" layoutY="183.0" prefHeight="225.0" prefWidth="212.0" spacing="20.0">
+            <VBox alignment="CENTER" layoutX="12.0" layoutY="219.0" prefHeight="225.0" prefWidth="244.0" spacing="20.0">
                <children>
-                  <Button fx:id="forestGenerationButton" mnemonicParsing="false" onAction="#forestGenerationButtonOnAction" prefHeight="25.0" prefWidth="213.0" text="Generate Simulated Forest Data">
+                  <Button fx:id="forestGenerationButton" mnemonicParsing="false" onAction="#forestGenerationButtonOnAction" prefHeight="27.0" prefWidth="242.0" text="Generate Simulated Forest Data">
                      <font>
                         <Font name="PT Sans" size="14.0" />
                      </font>
                   </Button>
-                  <Button fx:id="runAlgorithmButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="213.0" text="Run Thinning Algorithm">
+                  <Button fx:id="runAlgorithmButton" mnemonicParsing="false" onAction="#runAlgorithmButtonOnAction" prefHeight="25.0" prefWidth="242.0" text="Run Thinning Algorithm">
                      <font>
                         <Font name="PT Sans" size="14.0" />
                      </font>
                   </Button>
-                  <Button fx:id="visualizerStartButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="213.0" text="Start Visualizer">
+                  <Button fx:id="visualizerStartButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="242.0" text="Start Visualizer">
                      <font>
                         <Font name="PT Sans" size="14.0" />
                      </font>
                   </Button>
-                  <Button fx:id="exportButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="213.0" text="Export">
-                     <font>
-                        <Font name="PT Sans" size="14.0" />
-                     </font>
-                  </Button>
-                  <Button fx:id="exitButton" mnemonicParsing="false" onAction="#exitButtonOnAction" prefHeight="27.0" prefWidth="230.0" style="-fx-background-color: AB4E4E;" text="EXIT" textFill="WHITE" />
+                  <Button fx:id="exitButton" mnemonicParsing="false" onAction="#exitButtonOnAction" prefHeight="27.0" prefWidth="242.0" style="-fx-background-color: AB4E4E;" text="EXIT" textFill="WHITE" />
                </children>
             </VBox>
             <Label alignment="CENTER" contentDisplay="CENTER" layoutX="13.0" layoutY="47.0" prefHeight="34.0" prefWidth="226.0" text="Treemoval" textFill="WHITE">
@@ -52,12 +46,28 @@
                   <Font name="Copperplate" size="40.0" />
                </font>
             </Label>
-            <TextField fx:id="filepathTextField" layoutX="24.0" layoutY="141.0" onAction="#filePathOnEnter" prefHeight="29.0" prefWidth="177.0" promptText="Enter file path to .csv file">
+            <TextField fx:id="filepathTextField" layoutX="14.0" layoutY="141.0" onAction="#filePathOnEnter" prefHeight="29.0" prefWidth="205.0" promptText="Enter file path to .csv file">
+               <font>
+                  <Font name="PT Sans" size="11.0" />
+               </font>
+            </TextField>
+            <Button fx:id="fileFinderButton" layoutX="223.0" layoutY="142.0" mnemonicParsing="false" onAction="#fileFinderButtonOnAction" prefHeight="27.0" prefWidth="32.0" text="...." />
+            <Label layoutX="62.0" layoutY="173.0" prefHeight="17.0" prefWidth="141.0" text="Export Forest Data" textFill="WHITE">
+               <font>
+                  <Font name="PT Sans" size="16.0" />
+               </font>
+            </Label>
+            <Button fx:id="exportButton" layoutX="32.0" layoutY="444.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="205.0" text="Export">
                <font>
                   <Font name="PT Sans" size="14.0" />
                </font>
+            </Button>
+            <TextField fx:id="exportPathTextField" layoutX="14.0" layoutY="194.0" prefHeight="29.0" prefWidth="205.0" promptText="Enter path to  export location">
+               <font>
+                  <Font name="PT Sans" size="11.0" />
+               </font>
             </TextField>
-            <Button fx:id="fileFinderButton" layoutX="204.0" layoutY="142.0" mnemonicParsing="false" onAction="#fileFinderButtonOnAction" prefHeight="27.0" prefWidth="32.0" text="...." />
+            <Button fx:id="exportFinderButton" layoutX="223.0" layoutY="195.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="32.0" text="...." />
          </children>
       </AnchorPane>
    </right>

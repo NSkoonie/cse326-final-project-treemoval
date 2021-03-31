@@ -3,7 +3,6 @@ package com.treemoval.gui;
 import com.treemoval.data.Forest;
 import com.treemoval.visualizer.ForestGroup;
 import com.treemoval.visualizer.ForestScene;
-import com.treemoval.data.Forest;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -30,12 +29,43 @@ public class TreemovalController {
     @FXML
     private ForestScene forestSubScene;
     @FXML
-    private Button forestGenerationButton;
+    private Button exportButton;
+    @FXML
+    private Button runAlgorithmbutton;
+    private Forest currentForest;
+
+    //--------------------------------------------------------------------------------------------------
+    // TreemovalController::getCurrentForest
+    //
+    /**
+     *
+     */
+    public Forest getCurrentForest() {
+        return currentForest;
+    }
+    //--------------------------------------------------------------------------------------------------
+    // TreemovalController::setCurrentForest
+    //
+    /**
+     *
+     */
+    public void setCurrentforest(Forest forest) {
+        this.currentForest = forest;
+    }
 
     @FXML
     public void initialize() {
 
-        Forest forest = new Forest(2000, 3000);
+        Forest forest = new Forest(0, 0);
+        ForestGroup forestGroup = new ForestGroup(forest);
+
+        forestSubScene.init(forestGroup);
+
+        forestSubScene.heightProperty().bind(borderPane.heightProperty());
+        forestSubScene.widthProperty().bind(borderPane.widthProperty());
+    }
+
+    public void loadForest(Forest forest) {
         ForestGroup forestGroup = new ForestGroup(forest);
 
         forestSubScene.init(forestGroup);
@@ -86,6 +116,10 @@ public class TreemovalController {
             filepathTextField.setText(selectedFile);
             forest.readFromFile(fileLocation);
             System.out.println(selectedFile +" was selected");
+            forest.readFromFile(selectedFile);
+
+            loadForest(forest);
+            setCurrentforest(forest);
         }
 
     }
@@ -137,6 +171,11 @@ public class TreemovalController {
                 confirmAlert.showAndWait();
                 filepathTextField.setText(selectedFile);
                 System.out.println(selectedFile +" was selected");
+
+                Forest forest = new Forest();
+                forest.readFromFile(selectedFile);
+                loadForest(forest);
+                setCurrentforest(forest);
             }
         }
     }
@@ -178,11 +217,27 @@ public class TreemovalController {
 
             if(validInput) {
                 System.out.println("Valid Input:" + Integer.parseInt(values[0]) + " " +Integer.parseInt(values[1]));
-                //Forest forest = new Forest(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
+
+                Forest forest = new Forest(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
+
+                loadForest(forest);
+
             } else {
                 System.out.println("Invalid Input");
             }
 
         }
+    }
+
+    /*public void exportButtonOnAction(ActionEvent event) {
+
+
+    }*/
+
+    public void runAlgorithmButtonOnAction(ActionEvent event) {
+        currentForest.listTrees();
+        currentForest.thinningAlgorithm();
+        loadForest(currentForest);
+
     }
 }

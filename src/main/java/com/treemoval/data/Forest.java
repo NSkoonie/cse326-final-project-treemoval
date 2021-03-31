@@ -1,9 +1,9 @@
 package com.treemoval.data;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+
+import static com.treemoval.data.Tags.*;
 import static java.lang.Math.*;
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -22,23 +22,33 @@ import static java.lang.Math.*;
 public class Forest {
 
     public List<Tree> trees = new ArrayList<>(); // todo should probably be private
+    private double safeDistance = 5; //todo need to implement way for user to modify
+                                    // note from nps: this should be passed in to the thinning algorithm
+                                    //      (it will be retrieved as a value from the gui)
 
     //--------------------------------------------------------------------------------------------------
     // Forest::Forest
     //
     /**
-     * The default constructor currently instantiates with 20 randomly positioned trees.
-     *
-     * todo the default constructor should create an empty forest, and another method should
-     *      be created to add random trees to it. Alternatively, we can overload the constructor
-     *      to take in the number of trees and other parameters for a random forest.
+     * The default constructor leaves the ArrayList empty
      */
     public Forest() {
-        for(int i = 0; i < 20; i++){
+
+    }
+
+    /**
+     * This constructor instantiates with user defined number of trees and area of forest.
+     *
+     * @param num_trees the number of trees in the forest
+     * @param bound the bounds for the x and y coordinates (0 - inclusive, bound - exclusive)
+     */
+    public Forest(int num_trees, int bound) {
+
+        for(int i = 0; i < num_trees; i++){
             Random rand = new Random();
-            double x = rand.nextInt(10) + rand.nextDouble();
-            double y = rand.nextInt(10) + rand.nextDouble();
-            double z = 0;
+            double x = rand.nextInt(bound) + rand.nextDouble();
+            double z = rand.nextInt(bound) + rand.nextDouble();
+            double y = 0;
 
             this.trees.add(new Tree(x, y, z));
         }
@@ -68,14 +78,55 @@ public class Forest {
         while ((line = br.readLine()) != null) {
             // System.out.println(line);
             String[] dets = line.split(",");
-            int x = Integer.parseInt(dets[0]);
-            int y = Integer.parseInt(dets[1]);
-            int z = Integer.parseInt(dets[2]);
+            double x = Double.parseDouble(dets[0]);
+            double y = Double.parseDouble(dets[1]);
+            double z = Double.parseDouble(dets[2]);
             this.trees.add(new Tree(x, y, z));
             // for (String string : dets) { System.out.println(string); }
         }
 
         br.close();
+    }
+
+    //--------------------------------------------------------------------------------------------------
+    // Forest::exportForest
+    //
+    /**
+     * Reads tree data from a CSV file and stores it in the forest.
+     * Returns 0 on success, 1 if file exists, 2 if file extension is incorrect
+     * @throws IOException if the CSV file is not found
+     */
+    public int exportForest(String fileName) throws IOException {
+
+        File file = new File(fileName);
+        String line;
+
+        if(!fileName.substring(fileName.length() - 4).equals(".csv")) {
+            System.out.println("The file name needs to with the .csv file extension.\n");
+            return 2;
+        }
+
+
+        if(file.createNewFile()){
+            System.out.println("File created: " + file.getName());
+            FileWriter writer = new FileWriter(fileName);
+            BufferedWriter bw = new BufferedWriter(writer);
+
+            for(Tree tree: this.trees){
+                line = tree.getX() + "," + tree.getY() + "," + tree.getZ();
+                bw.write(line);
+                bw.newLine();
+            }
+
+            bw.close();
+            System.out.println("File writing success.\n");
+
+        } else {
+            System.out.println("File already exists.\n");
+            return 1;
+        }
+
+        return 0;
     }
 
     //--------------------------------------------------------------------------------------------------
@@ -131,6 +182,47 @@ public class Forest {
     }
 
     //--------------------------------------------------------------------------------------------------
+    // Forest::thinningAlgorithm
+    //
+    /**
+     * The algorithm that goes through the forest and marks each tree to be cut or not. It begins by selecting the first
+     * tree in the forest as the "currentTree", and marks it to not be cut. Then the distance to every tree in the
+     * forest is calculated, then sorted by distance (closest to furthest). Then, the algorithm goes through each tree.
+     * If the tree has not been marked yet and it is within the "safeDistance", it gets marked for removal. If the
+     * tree has not been marked and it is outside the safeDistance, then it is marked to not be cut down,
+     * and is then marked as the new "currentTree" since it is the closest tree at a safe distance.
+     * The loop ends. If the # of marked trees is not equal to the # of total trees then the process begins again.
+     *
+     * todo it might be able to be more efficient but it would be a lot of work for little return
+     * */
+    public void thinningAlgorithm() {
+        int marked = 1; //# of trees marked to be cut or not
+        int treeNum = this.trees.size(); //total # of trees
+        Tree currentTree = this.getTree(0);
+        currentTree.setTag(SAFE);
+
+        while (marked < treeNum) {
+            for (Tree tmpTree : this.trees) {
+                tmpTree.setDist(distance(currentTree, tmpTree));
+            }
+
+            this.trees.sort(new SortByDist()); //sort by closest to furthest distance
+
+            for (Tree tmpTree : this.trees) {
+                if (tmpTree.getDist() < safeDistance && tmpTree.getTag() == UNMARKED) {
+                    tmpTree.setTag(CUT); //to be cut!
+                    marked++;
+                } else if (tmpTree.getDist() >= safeDistance && tmpTree.getTag() == UNMARKED) {
+                    currentTree = tmpTree;
+                    currentTree.setTag(SAFE);//don't cut
+                    marked++;
+                    break;
+                }
+            }
+        }
+    }
+
+    //--------------------------------------------------------------------------------------------------
     // Forest::main
     //
     /**
@@ -143,15 +235,33 @@ public class Forest {
      */
     public static void main(String[] args) {
 
-        Forest forest = new Forest();
+        Forest forest = new Forest(20, 20);
+        Forest new_forest = new Forest(100, 1000);
+
+        System.out.println("This is the first forest using the default constructor.");
         forest.listTrees();
+
+        System.out.println("This is the second forest created by setting the number of trees and area.");
+        new_forest.listTrees();
+
         System.out.println("The distance between the first two trees is: " +
                 distance(forest.getTree(0), forest.getTree(1)) + "\n");
 
+        forest.thinningAlgorithm();
+        forest.listTrees();
+
+        String export = "forest_export.csv";
 
         try {
+            forest.exportForest(export);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-            forest.readFromFile("forest.txt");
+
+        try {
+            forest.readFromFile("forest_export.csv");
+            System.out.println("This is reading from the file forest_export.csv");
             forest.listTrees();
             System.out.println("The distance between the first two trees is: " +
                     distance(forest.getTree(0), forest.getTree(1)) + "\n");

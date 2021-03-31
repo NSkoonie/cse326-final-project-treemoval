@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.treemoval.visualizer.ForestGroup?>
+<?import com.treemoval.visualizer.ForestScene?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
@@ -7,9 +9,6 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-
-<?import com.treemoval.visualizer.ForestScene?>
-<?import com.treemoval.visualizer.ForestGroup?>
 
 <BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="486.0" prefWidth="898.0" style="-fx-background-color: C9C9C9; -fx-border-color: #000000; -fx-border-width: 0;" xmlns="http://javafx.com/javafx/10.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.treemoval.gui.TreemovalController">
    <center>
@@ -20,7 +19,7 @@
       </ForestScene>
    </center>
    <right>
-      <AnchorPane maxWidth="265.0" minHeight="0.0"  prefWidth="265.0" style="-fx-background-color: #618764; -fx-border-color: #000000; -fx-border-width: 1;" BorderPane.alignment="CENTER_RIGHT">
+      <AnchorPane maxWidth="265.0" minHeight="0.0" prefWidth="265.0" style="-fx-background-color: #618764; -fx-border-color: #000000; -fx-border-width: 1;" BorderPane.alignment="CENTER_RIGHT">
          <children>
             <Label layoutX="60.0" layoutY="112.0" prefHeight="17.0" prefWidth="141.0" text="Import Forest Data" textFill="WHITE">
                <font>
@@ -29,7 +28,7 @@
             </Label>
             <VBox layoutX="24.0" layoutY="183.0" prefHeight="225.0" prefWidth="212.0" spacing="20.0">
                <children>
-                  <Button fx:id="forestGenerationButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="213.0" text="Generate Simulated Forest Data">
+                  <Button fx:id="forestGenerationButton" mnemonicParsing="false" onAction="#forestGenerationButtonOnAction" prefHeight="25.0" prefWidth="213.0" text="Generate Simulated Forest Data">
                      <font>
                         <Font name="PT Sans" size="14.0" />
                      </font>

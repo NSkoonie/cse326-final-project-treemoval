@@ -22,6 +22,10 @@ import static java.lang.Math.*;
 public class Forest {
 
     List<Tree> trees = new ArrayList<>();
+    private double minX;
+    private double maxX;
+    private double minZ;
+    private double maxZ;
 
     //--------------------------------------------------------------------------------------------------
     // Forest::Forest
@@ -131,6 +135,26 @@ public class Forest {
     }
 
     //--------------------------------------------------------------------------------------------------
+    // Forest::setBound
+    //
+    /**
+     * Sets the bound for use with the visualizer.
+     */
+    public void setBound() {
+        for (Tree tree: trees) {
+            if (tree.getX() < minX)
+                minX = tree.getX();
+            if (tree.getX() > maxX)
+                maxX = tree.getX();
+
+            if (tree.getZ() < minZ)
+                minZ = tree.getZ();
+            if (tree.getZ() > maxZ)
+                maxZ = tree.getZ();
+        }
+    }
+
+    //--------------------------------------------------------------------------------------------------
     // Forest::main
     //
     /**
@@ -147,6 +171,7 @@ public class Forest {
         forest.listTrees();
         System.out.println("The distance between the first two trees is: " +
                 distance(forest.getTree(0), forest.getTree(1)) + "\n");
+        forest.setBound();
 
 
         try {

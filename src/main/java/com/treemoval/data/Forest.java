@@ -46,6 +46,7 @@ public class Forest {
 
             this.trees.add(new Tree(x, y, z));
         }
+        updateBounds();
     }
 
     //--------------------------------------------------------------------------------------------------
@@ -135,12 +136,12 @@ public class Forest {
     }
 
     //--------------------------------------------------------------------------------------------------
-    // Forest::setBound
+    // Forest::updateBounds
     //
     /**
      * Sets the bound for use with the visualizer.
      */
-    public void setBound() {
+    public void updateBounds() {
         for (Tree tree: trees) {
             if (tree.getX() < minX)
                 minX = tree.getX();
@@ -171,7 +172,6 @@ public class Forest {
         forest.listTrees();
         System.out.println("The distance between the first two trees is: " +
                 distance(forest.getTree(0), forest.getTree(1)) + "\n");
-        forest.setBound();
 
 
         try {

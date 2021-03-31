@@ -1,37 +1,40 @@
 package com.treemoval.gui;
 
+import com.treemoval.visualizer.ForestGroup;
+import com.treemoval.visualizer.ForestScene;
 import javafx.fxml.FXML;
-import javafx.scene.SubScene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
-import com.treemoval.data.Forest;
 
 import java.io.File;
 
 public class TreemovalController {
 
     @FXML
+    private BorderPane borderPane;
+    @FXML
     private TextField filepathTextField;
     @FXML
     private Button exitButton;
     @FXML
-    private Button forestGenerationButton;
+    private ForestScene forestSubScene;
+
     @FXML
-    private Button runAlgorithmButton;
-    @FXML
-    private Button visualizerStartButton;
-    @FXML
-    private Button exportButton;
-    @FXML
-    private SubScene forestSubScene;
-    @FXML
-    private Button fileFinderButton;
+    public void initialize() {
+
+        ForestGroup forest = new ForestGroup();
+
+        forestSubScene.init(forest);
+
+        forestSubScene.heightProperty().bind(borderPane.heightProperty());
+        forestSubScene.widthProperty().bind(borderPane.widthProperty());
+    }
 
     public void filePathOnEnter(ActionEvent event) { // todo setFocus
         String fileLocation = filepathTextField.getText();

@@ -1,5 +1,6 @@
 package com.treemoval.visualizer;
 
+import com.treemoval.data.Point;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.DepthTest;
 import javafx.scene.Group;
@@ -9,7 +10,6 @@ import javafx.scene.shape.MeshView;
 import javafx.scene.transform.Rotate;
 
 import java.io.IOException;
-import java.util.concurrent.ThreadLocalRandom;
 
 //--------------------------------------------------------------------------------------------------
 // ::TreeGroup
@@ -20,6 +20,18 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class TreeGroup extends Group {
 
+    private final double TREE_Y_OFFSET = 30;
+
+    //--------------------------------------------------------------------------------------------------
+    // TreeGroup::TreeGroup
+    //
+    /**
+     * Default constructor creates a tree at the origin.
+     */
+    public TreeGroup() {
+        this(0, 0, 0);
+    }
+
     //--------------------------------------------------------------------------------------------------
     // TreeGroup::TreeGroup
     //
@@ -28,7 +40,7 @@ public class TreeGroup extends Group {
      *
      * todo should take coordinates as input
      */
-    public TreeGroup() {
+    public TreeGroup(double pX, double pY, double pZ) {
 
         try {
             getChildren().addAll(
@@ -43,12 +55,12 @@ public class TreeGroup extends Group {
         setScaleX(10.0);
         setScaleY(10.0);
         setScaleZ(10.0);
-        setTranslateY(30);
-        setTranslateX(ThreadLocalRandom.current().nextInt(5, 2990));
-        setTranslateZ(ThreadLocalRandom.current().nextInt(5, 2990));
+
+        setTranslateX(pX);
+        setTranslateY(TREE_Y_OFFSET + pY);
+        setTranslateZ(pZ);
 
         setDepthTest(DepthTest.ENABLE);
-
 
     }
 

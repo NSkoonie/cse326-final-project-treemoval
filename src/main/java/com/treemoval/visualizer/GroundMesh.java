@@ -1,5 +1,6 @@
 package com.treemoval.visualizer;
 
+import com.treemoval.data.Point;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.MeshView;

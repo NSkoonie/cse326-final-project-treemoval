@@ -1,5 +1,6 @@
 package com.treemoval.gui;
 
+import com.treemoval.data.Forest;
 import com.treemoval.visualizer.ForestGroup;
 import com.treemoval.visualizer.ForestScene;
 import javafx.fxml.FXML;
@@ -28,9 +29,10 @@ public class TreemovalController {
     @FXML
     public void initialize() {
 
-        ForestGroup forest = new ForestGroup();
+        Forest forest = new Forest(2000, 3000);
+        ForestGroup forestGroup = new ForestGroup(forest);
 
-        forestSubScene.init(forest);
+        forestSubScene.init(forestGroup);
 
         forestSubScene.heightProperty().bind(borderPane.heightProperty());
         forestSubScene.widthProperty().bind(borderPane.widthProperty());

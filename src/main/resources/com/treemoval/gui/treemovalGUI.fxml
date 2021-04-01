@@ -8,8 +8,9 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.CheckBox?>
+
 <BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="486.0" prefWidth="898.0" style="-fx-background-color: C9C9C9; -fx-border-color: #000000; -fx-border-width: 0;" xmlns="http://javafx.com/javafx/10.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.treemoval.gui.TreemovalController">
    <center>
       <ForestScene fx:id="forestSubScene" />
@@ -72,6 +73,10 @@
                         <Font name="PT Sans" size="14.0" />
                      </font>
                   </Button>
+
+                  <CheckBox fx:id="showMarkedTreesCheckBox" layoutX="106.0" layoutY="66.0" textFill="WHITE" mnemonicParsing="false" onAction="#showMarkedTreesCheckBoxOnAction" selected="true" text="Show Marked Trees" />
+
+
                   <Button fx:id="visualizerStartButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="242.0" text="Start Visualizer">
                      <font>
                         <Font name="PT Sans" size="14.0" />

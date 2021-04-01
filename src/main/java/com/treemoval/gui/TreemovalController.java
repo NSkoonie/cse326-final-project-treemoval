@@ -5,10 +5,7 @@ import com.treemoval.visualizer.ForestGroup;
 import com.treemoval.visualizer.ForestScene;
 import com.treemoval.data.Forest;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
@@ -36,8 +33,11 @@ public class TreemovalController {
     private Button runAlgorithmbutton;
     @FXML
     private Button forestGenerationButton;
+    @FXML
+    private CheckBox showMarkedTreesCheckBox;
 
     private Forest currentForest;
+    private ForestGroup currentForestGroup;
 
     //--------------------------------------------------------------------------------------------------
     // TreemovalController::getCurrentForest
@@ -82,8 +82,8 @@ public class TreemovalController {
     //
     public void loadForest(Forest forest) {
 
-        ForestGroup forestGroup = new ForestGroup(forest);
-        forestSubScene.setForestGroup(forestGroup);
+        currentForestGroup = new ForestGroup(forest);
+        forestSubScene.setForestGroup(currentForestGroup);
 
     }
 
@@ -249,4 +249,19 @@ public class TreemovalController {
         loadForest(currentForest);
 
     }
+
+    //--------------------------------------------------------------------------------------------------
+    // TreemovalController::showMarkedTreesCheckBoxOnAction
+    //
+    /**
+     * Adds the ActionEvent for the GUI exit button
+     */
+    public void showMarkedTreesCheckBoxOnAction(ActionEvent event) {
+        if(showMarkedTreesCheckBox.isSelected()) {
+            currentForestGroup.showRedTrees();
+        } else {
+            currentForestGroup.hideRedTrees();
+        }
+    }
+
 }

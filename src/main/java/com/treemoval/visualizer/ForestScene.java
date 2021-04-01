@@ -4,6 +4,8 @@ package com.treemoval.visualizer;
 // ::ForestScene
 //
 
+import com.treemoval.data.Point;
+import javafx.geometry.Bounds;
 import javafx.scene.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
@@ -19,14 +21,18 @@ import javafx.scene.shape.Box;
 public class ForestScene extends SubScene {
 
     final Group root = new Group();
-    final Xform axisGroup = new Xform();
-    final PerspectiveCamera camera = new PerspectiveCamera(true);
-    final Xform cameraXform = new Xform();
-    final Xform cameraXform2 = new Xform();
-    final Xform cameraXform3 = new Xform();
+    private ForestGroup forestGroup = null;
+
+    AmbientLight contrastLight = new AmbientLight();
+
+    private final Xform axisGroup = new Xform();
+    private final PerspectiveCamera camera = new PerspectiveCamera(true);
+    private final Xform cameraXform = new Xform();
+    private final Xform cameraXform2 = new Xform();
+    private final Xform cameraXform3 = new Xform();
     private static final double CAMERA_INITIAL_DISTANCE = -450;
-    private static final double CAMERA_INITIAL_X_ANGLE = 70.0;
-    private static final double CAMERA_INITIAL_Y_ANGLE = 320.0;
+    private static final double CAMERA_INITIAL_X_ANGLE = 35.0;
+    private static final double CAMERA_INITIAL_Y_ANGLE = 45.0;
     private static final double CAMERA_NEAR_CLIP = 0.1;
     private static final double CAMERA_FAR_CLIP = 10000.0;
     private static final double AXIS_LENGTH = 250.0;
@@ -65,6 +71,9 @@ public class ForestScene extends SubScene {
     public void init(ForestGroup forestGroup) {
 
         setRoot(root);
+
+        contrastLight.setLightOn(false);
+        root.getChildren().add(contrastLight);
 
         buildCamera();
         buildAxes();
@@ -105,19 +114,68 @@ public class ForestScene extends SubScene {
     }
 
     //--------------------------------------------------------------------------------------------------
+    // ForestScene::resetCamera
+    //
+    /**
+     * sets the camera position based on the forestGroup
+     * if there is no forestGroup (i.e. if it is null), thecamera will be pointed at origin.
+     *
+     */
+    public void resetCamera() {
+        forestGroup.getLayoutX();
+        Bounds bounds = forestGroup.getBoundsInLocal();
+        Point center = new Point(
+                (bounds.getMaxX() - bounds.getMinX()) / 4.0,
+                0,
+                (bounds.getMaxZ() - bounds.getMinZ()) / 4.0
+        );
+        System.out.println("Center: ");
+        System.out.println("x: " + center.x + " y: " + center.y + " z: " + center.z);
+
+        cameraXform.t.setX(center.x);
+        cameraXform.t.setZ(center.z);
+
+        cameraXform3.setTranslateZ(- bounds.getDepth());
+        cameraXform.ry.setAngle(CAMERA_INITIAL_Y_ANGLE);
+        cameraXform.rx.setAngle(CAMERA_INITIAL_X_ANGLE);
+    }
+
+    //--------------------------------------------------------------------------------------------------
     // ForestScene::setForestGroup
     //
     /**
      * changes the forest displayed in the subscene
      *
-     *  todo should we reset the camera position here? or in another function?
-     *
      * @param forestGroup the ForestGroup to be displayed within the scene
      */
     public void setForestGroup(ForestGroup forestGroup) {
-        root.getChildren().remove(root.lookup("#forest"));
-        forestGroup.setId("forest");
-        root.getChildren().add(forestGroup);
+        root.getChildren().remove(this.forestGroup);
+        this.forestGroup = forestGroup;
+        root.getChildren().add(this.forestGroup);
+
+        resetCamera();
+    }
+
+    //--------------------------------------------------------------------------------------------------
+    // ForestScene::setContrastDisplayMode
+    //
+    public void setContrastDisplayMode() {
+        setFill(Color.BLACK);
+        contrastLight.setLightOn(true);
+        if(forestGroup != null) {
+            forestGroup.hideGround();
+        }
+    }
+
+    //--------------------------------------------------------------------------------------------------
+    // ForestScene::setNormalDisplayMode
+    //
+    public void setNormalDisplayMode() {
+        setFill(Color.LIGHTBLUE);
+        contrastLight.setLightOn(false);
+        if(forestGroup != null) {
+            forestGroup.showGround();
+        }
     }
 
     //--------------------------------------------------------------------------------------------------
@@ -201,7 +259,13 @@ public class ForestScene extends SubScene {
                 // limit rotation from going below the horizon
                 if(rx < 3) { rx = 3; }
                 // limit camera rotation to prevent going upside down
-                if(rx > 90) { rx = 90; }
+                if(rx >= 90) { rx = 90; }
+
+                if(rx > 85) {
+                    setContrastDisplayMode();
+                } else {
+                    setNormalDisplayMode();
+                }
 
                 cameraXform.ry.setAngle(ry);
                 cameraXform.rx.setAngle(rx);

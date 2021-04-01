@@ -17,7 +17,8 @@ import javafx.scene.paint.PhongMaterial;
  */
 public class ForestGroup extends Group {
 
-    Group redTrees;
+    private Group redTrees;
+    private GroundMesh groundMesh;
 
     public ForestGroup(Forest forest) {
 
@@ -25,7 +26,7 @@ public class ForestGroup extends Group {
         int xSize = (int)( forest.getMaxX() / 10.0) + 14;
         int zSize = (int)(forest.getMaxZ() / 10.0) + 14;
         System.out.println("xSize: " + xSize + " zSize: " + zSize);
-        GroundMesh groundMesh = new GroundMesh( xSize, zSize );
+        groundMesh = new GroundMesh( xSize, zSize );
         getChildren().add(groundMesh);
 
         AmbientLight ambientGroundLight = new AmbientLight();
@@ -39,28 +40,29 @@ public class ForestGroup extends Group {
         allTrees.setTranslateX(70);
         allTrees.setTranslateZ(70);
 
-        redTrees = new Group();
-
         AmbientLight ambientTreeLight = new AmbientLight();
         ambientTreeLight.setColor(Color.rgb(90, 90, 90, 1));
         ambientTreeLight.getScope().add(allTrees);
         getChildren().add(ambientTreeLight);
 
+        Group greenTrees = new Group();
+        allTrees.getChildren().addAll(greenTrees);
+        redTrees = new Group();
+        allTrees.getChildren().add(redTrees);
+
+
         for(Tree tree : forest.trees) {
+
             TreeGroup treeGroup = new TreeGroup(tree.getX(), tree.getY(), tree.getZ());
+
             if(tree.getTag() == Tags.CUT) {
                 treeGroup.makeRed();
                 redTrees.getChildren().add(treeGroup);
+            } else {
+                greenTrees.getChildren().add(treeGroup);
             }
-            allTrees.getChildren().add(treeGroup);
-        }
 
-        TreeGroup tree = new TreeGroup();
-        tree.setTranslateY(30);
-        tree.setTranslateX(30);
-        tree.setTranslateZ(30);
-        tree.makeRed();
-        allTrees.getChildren().addAll(tree);
+        }
 
         //RockGroup rocks = new RockGroup();
         //getChildren().add(rocks);
@@ -79,6 +81,20 @@ public class ForestGroup extends Group {
     //
     public void showRedTrees() {
         redTrees.setVisible(true);
+    }
+
+    //--------------------------------------------------------------------------------------------------
+    // ForestGroup::hideGround
+    //
+    public void hideGround() {
+        groundMesh.setVisible(false);
+    }
+
+    //--------------------------------------------------------------------------------------------------
+    // ForestGroup::hideGround
+    //
+    public void showGround() {
+        groundMesh.setVisible(true);
     }
 
 }

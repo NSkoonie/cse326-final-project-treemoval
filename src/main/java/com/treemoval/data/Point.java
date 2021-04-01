@@ -9,9 +9,9 @@ package com.treemoval.data;
  */
 public class Point {
 
-    public float x = 0;
-    public float y = 0;
-    public float z = 0;
+    public double x;
+    public double y;
+    public double z;
 
     /**
      * Instantiates a new point with passed coordinates.
@@ -20,7 +20,7 @@ public class Point {
      * @param pY the y coordinate for the new point
      * @param pZ the z coordinate for the new point
      */
-    public Point (float pX, float pY, float pZ) {
+    public Point (double pX, double pY, double pZ) {
 
         this.x = pX;
         this.y = pY;

@@ -106,9 +106,9 @@ public class GroundMesh extends MeshView {
 
             Point point = points[i % width][i / length];
 
-            pointsRaw[i*3] = point.x;
-            pointsRaw[i*3+1] = point.y;
-            pointsRaw[i*3+2] = point.z;
+            pointsRaw[i*3] =  (float) point.x;
+            pointsRaw[i*3+1] = (float) point.y;
+            pointsRaw[i*3+2] = (float) point.z;
 
         }
 

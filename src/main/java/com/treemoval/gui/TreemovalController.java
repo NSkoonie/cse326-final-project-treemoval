@@ -3,7 +3,6 @@ package com.treemoval.gui;
 import com.treemoval.data.Forest;
 import com.treemoval.visualizer.ForestGroup;
 import com.treemoval.visualizer.ForestScene;
-import com.treemoval.data.Forest;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -25,38 +24,36 @@ public class TreemovalController {
     @FXML
     private BorderPane borderPane;
     @FXML
-    private TextField filepathTextField;
+    private TextField filePathTextField;
+    @FXML
+    private TextField exportPathTextField;
     @FXML
     private Button exitButton;
+    @FXML
+    private Button fileFinderButton;
     @FXML
     private ForestScene forestSubScene;
     @FXML
     private Button exportButton;
+    @FXML
+    private Button importButton;
     @FXML
     private Button runAlgorithmbutton;
     @FXML
     private Button forestGenerationButton;
 
     private Forest currentForest;
+    private String filePath;
+    private String exportPath;
 
-    //--------------------------------------------------------------------------------------------------
-    // TreemovalController::getCurrentForest
-    //
-    /**
-     *
-     */
-    public Forest getCurrentForest() {
-        return currentForest;
-    }
-    //--------------------------------------------------------------------------------------------------
-    // TreemovalController::setCurrentForest
-    //
-    /**
-     *
-     */
-    public void setCurrentforest(Forest forest) {
-        this.currentForest = forest;
-    }
+    public Forest getCurrentForest() { return currentForest;}
+    public void setCurrentforest(Forest forest) { this.currentForest = forest;}
+
+    public String getFilepath() { return filePath;}
+    public void setFilePath(String filePath) { this.filePath = filePath;}
+
+    public String getExportpath() { return exportPath;}
+    public void setExportPath(String exportPath) { this.exportPath = exportPath;}
 
     //--------------------------------------------------------------------------------------------------
     // TreemovalController::initialize
@@ -84,6 +81,7 @@ public class TreemovalController {
 
         ForestGroup forestGroup = new ForestGroup(forest);
         forestSubScene.setForestGroup(forestGroup);
+        setCurrentforest(forest);
 
     }
 
@@ -99,8 +97,8 @@ public class TreemovalController {
      * todo setFocus
      */
     public void filePathOnEnter(ActionEvent event) throws IOException {
-        Stage stage = (Stage) filepathTextField.getScene().getWindow();
-        String fileLocation = filepathTextField.getText();
+        Stage stage = (Stage) filePathTextField.getScene().getWindow();
+        String fileLocation = filePathTextField.getText();
 
         Forest forest = new Forest();
 
@@ -119,20 +117,19 @@ public class TreemovalController {
         errorAlert.getDialogPane().setHeaderText(".csv file not selected. Try again.");
 
         if(!selectedFile.substring(selectedFile.length() - 4).equals(checkCsv)) {
-            filepathTextField.clear();
+            filePathTextField.clear();
             errorAlert.showAndWait();
             System.out.println("Not a csv file!");
         } else {
             confirmAlert.getDialogPane().setHeaderText(selectedFile +" was selected");
-            filepathTextField.setText(fileLocation);
+            filePathTextField.setText(fileLocation);
             confirmAlert.showAndWait();
-            filepathTextField.setText(selectedFile);
+            filePathTextField.setText(selectedFile);
             forest.readFromFile(fileLocation);
             System.out.println(selectedFile +" was selected");
             forest.readFromFile(selectedFile);
 
             loadForest(forest);
-            setCurrentforest(forest);
         }
 
     }
@@ -157,38 +154,47 @@ public class TreemovalController {
      * todo Open the selected file to be read as forest data
      */
     public void fileFinderButtonOnAction(ActionEvent event) {
-        Stage stage = (Stage) exitButton.getScene().getWindow();
+        Stage stage = (Stage) fileFinderButton.getScene().getWindow();
 
         FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv");
+        fileChooser.getExtensionFilters().add(extensionFilter);
         File file = fileChooser.showOpenDialog(stage);
-
-        Alert errorAlert = new Alert(Alert.AlertType.ERROR, "");
-        Alert confirmAlert = new Alert(Alert.AlertType.INFORMATION, "");
-
-        errorAlert.initModality(Modality.APPLICATION_MODAL);
-        errorAlert.initOwner(stage);
-        confirmAlert.initModality(Modality.APPLICATION_MODAL);
-        confirmAlert.initOwner(stage);
-
-        errorAlert.getDialogPane().setHeaderText(".csv file not selected. Try again.");
 
         if(file != null) {
             String selectedFile = file.getAbsolutePath();
-            String checkCsv = ".csv";
 
-            if(!selectedFile.substring(selectedFile.length() - 4).equals(checkCsv)) {
-                errorAlert.showAndWait();
-                System.out.println("Not a csv file!");
-            } else {
-                confirmAlert.getDialogPane().setHeaderText(selectedFile +" was selected");
-                confirmAlert.showAndWait();
-                filepathTextField.setText(selectedFile);
-                System.out.println(selectedFile +" was selected");
+            filePathTextField.setText(selectedFile);
+            System.out.println(selectedFile +" was selected");
 
-                Forest forest = new Forest(selectedFile);
-                loadForest(forest);
-                setCurrentforest(forest);
-            }
+            setFilePath(selectedFile);
+
+        }
+    }
+
+    //--------------------------------------------------------------------------------------------------
+    // TreemovalController::exportFinderButtonOnAction
+    //
+    /**
+     * Adds the ActionEvent for the GUI file export selection button
+     */
+    public void exportFinderButtonOnAction(ActionEvent event) {
+        Stage stage = (Stage) exportButton.getScene().getWindow();
+
+        FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv");
+        fileChooser.getExtensionFilters().add(extensionFilter);
+        File file = fileChooser.showSaveDialog(stage);
+
+        if(file != null) {
+            String exportLocation = file.getAbsolutePath();
+            String fileName = file.getName();
+            System.out.println(exportLocation);
+
+            exportPathTextField.setText(exportLocation);
+            System.out.println(fileName +" will be saved to " + exportLocation);
+
+            setExportPath(exportLocation);
         }
     }
 
@@ -243,10 +249,34 @@ public class TreemovalController {
     //--------------------------------------------------------------------------------------------------
     // TreemovalController::runAlgorithmButtonOnAction
     //
+    /**
+     *
+     */
     public void runAlgorithmButtonOnAction(ActionEvent event) {
 
         Forest newForest = currentForest.runThinningAlgorithmNewForest(25);
         loadForest(currentForest);
 
+    }
+
+    //--------------------------------------------------------------------------------------------------
+    // TreemovalController::importButtonOnAction
+    //
+    /**
+     *
+     */
+    public void importButtonOnAction(ActionEvent event) {
+        Forest forest = new Forest(getFilepath());
+        loadForest(forest);
+    }
+
+    //--------------------------------------------------------------------------------------------------
+    // TreemovalController::exportButtonOnAction
+    //
+    /**
+     *
+     */
+    public void exportButtonOnAction(ActionEvent event) throws IOException {
+      currentForest.exportForest(exportPath);
     }
 }

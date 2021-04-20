@@ -15,6 +15,8 @@ public class Tree {
     private double x;
     private double y;
     private double z;
+    private double height;
+    private double radius;
     private Tags tag = UNMARKED;
     private double dist;
 
@@ -43,10 +45,12 @@ public class Tree {
      * @param y the y coordinate of the tree
      * @param z the z coordinate (elevation) of the tree
      */
-    public Tree(double x, double y, double z) {
+    public Tree(double x, double y, double z, double height, double radius) {
         this.x = x;
         this.y = y;
         this.z = z;
+        this.height = height;
+        this.radius = radius;
     }
 
     //--------------------------------------------------------------------------------------------------
@@ -59,7 +63,8 @@ public class Tree {
      */
     @Override
     public String toString() {
-        return "x: " + getX() + ", y: " + getY() + ", z: " + getZ() + ", cut: " + getTag();
+        return "x: " + getX() + ", y: " + getY() + ", z: " + getZ() + ", height: " + getHeight() + ", radius: "
+                + getRadius() + ", cut: " + getTag();
     }
 
     //--------------------------------------------------------------------------------------------------
@@ -74,6 +79,12 @@ public class Tree {
 
     public double getZ() { return z; }
     public void setZ(double z) { this.z = z; }
+
+    public double getHeight() { return height; }
+    public void setHeight(double height) { this.height = height; }
+
+    public double getRadius() { return radius; }
+    public void setRadius(double radius) { this.radius = radius; }
 
     public Tags getTag() {return tag;}
     public void setTag(Tags tag) {this.tag = tag;}

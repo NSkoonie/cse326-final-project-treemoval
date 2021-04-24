@@ -300,6 +300,8 @@ public class Forest {
         int marked = 1; //# of trees marked to be cut or not
         int treeNum = this.trees.size(); //total # of trees
         Tree currentTree = this.getTree(0);
+        if (currentTree.getTag() != UNMARKED)
+            return;
         currentTree.setTag(SAFE);
 
         while (marked < treeNum) {
@@ -349,7 +351,7 @@ public class Forest {
      */
     public static void main(String[] args) {
 
-        Forest forest = new Forest(1000, 1500);
+        Forest forest = new Forest(10, 1500);
         Forest new_forest = new Forest(100, 1000);
 
         System.out.println("This is the first forest using the default constructor.");
@@ -361,6 +363,7 @@ public class Forest {
         System.out.println("The distance between the first two trees is: " +
                 distance(forest.getTree(0), forest.getTree(1)) + "\n");
 
+        forest.runThinningAlgorithm(5);
         forest.runThinningAlgorithm(5);
         forest.listTrees();
 
@@ -377,7 +380,7 @@ public class Forest {
         forest.listTrees();
         System.out.println("The distance between the first two trees is: " +
                 distance(forest.getTree(0), forest.getTree(1)) + "\n");
-
+        forest.runThinningAlgorithm(5);
 
 
     }

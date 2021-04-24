@@ -80,8 +80,8 @@ public class Forest {
             double x = rand.nextInt(bound) + rand.nextDouble();
             double z = rand.nextInt(bound) + rand.nextDouble();
             double y = 0;
-            double height = rand.nextInt(bound) + rand.nextDouble();
-            double radius = height / 4; //just seemed reasonable, change if need be
+            double height = (rand.nextInt(bound) + rand.nextDouble()) % 200;
+            double radius = height / 5; //just seemed reasonable, change if need be
 
 
             this.trees.add(new Tree(x, y, z, height, radius));
@@ -362,7 +362,7 @@ public class Forest {
 
         System.out.println("The distance between the first two trees is: " +
                 distance(forest.getTree(0), forest.getTree(1)) + "\n");
-
+        forest.listTrees();
         forest.runThinningAlgorithm(5);
         forest.runThinningAlgorithm(5);
         forest.listTrees();

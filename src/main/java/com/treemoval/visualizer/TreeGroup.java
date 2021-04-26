@@ -20,7 +20,17 @@ import java.io.IOException;
  */
 public class TreeGroup extends Group {
 
+    static final PhongMaterial greenMaterial = new PhongMaterial();
+    static final PhongMaterial redMaterial = new PhongMaterial();
+    {
+        greenMaterial.setDiffuseColor(new Color(0.02985, 0.406291, 0.017666, 1.0));
+        greenMaterial.setSpecularColor(Color.BLACK);
+        redMaterial.setDiffuseColor(Color.DARKRED);
+        redMaterial.setSpecularColor(Color.BLACK);
+    }
+
     private final double TREE_Y_OFFSET = 30;
+    boolean red = false;
 
     //--------------------------------------------------------------------------------------------------
     // TreeGroup::TreeGroup
@@ -72,14 +82,37 @@ public class TreeGroup extends Group {
      */
     public void makeRed() {
 
-        MeshView leaves = (MeshView) getChildren().get(0);
-        if(!leaves.getId().equals("leaves")) { return; }
+        if (!red) {
+            MeshView leaves = (MeshView) getChildren().get(0);
+            if (!leaves.getId().equals("leaves")) {
+                return;
+            }
 
-        final PhongMaterial redMaterial = new PhongMaterial();
-        redMaterial.setDiffuseColor(Color.DARKRED);
-        redMaterial.setSpecularColor(Color.BLACK);
+            leaves.setMaterial(redMaterial);
+            red = true;
+        }
+    }
 
-        leaves.setMaterial(redMaterial);
+    //--------------------------------------------------------------------------------------------------
+    // TreeGroup::makeRed
+    //
+    /**
+     * sets the leaves mesh of the TreeGroup to red material as indication that the tree is marked for cutting
+     */
+    public void toggleRed() {
+
+        if (red) {
+            MeshView leaves = (MeshView) getChildren().get(0);
+            if (!leaves.getId().equals("leaves")) {
+                return;
+            }
+
+            leaves.setMaterial(greenMaterial);
+            red = false;
+
+        } else {
+            makeRed();
+        }
     }
 
 

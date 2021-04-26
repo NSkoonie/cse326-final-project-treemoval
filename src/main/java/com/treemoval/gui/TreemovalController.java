@@ -68,7 +68,7 @@ public class TreemovalController {
         Forest forest = new Forest(0, 0);
         ForestGroup forestGroup = new ForestGroup(forest);
 
-        forestSubScene.init(forestGroup);
+        forestSubScene.init();
 
         forestSubScene.heightProperty().bind(borderPane.heightProperty());
         forestSubScene.widthProperty().bind(borderPane.widthProperty());
@@ -77,11 +77,11 @@ public class TreemovalController {
     //--------------------------------------------------------------------------------------------------
     // TreemovalController::loadForest
     //
-    public void loadForest(Forest forest) {
+    public void loadForest(Forest forest, boolean resetCamera) {
 
         setCurrentforest(forest);
         currentForestGroup = new ForestGroup(forest);
-        forestSubScene.setForestGroup(currentForestGroup);
+        forestSubScene.setForestGroup(currentForestGroup, resetCamera);
 
     }
 
@@ -129,7 +129,7 @@ public class TreemovalController {
             System.out.println(selectedFile +" was selected");
             forest.readFromFile(selectedFile);
 
-            loadForest(forest);
+            loadForest(forest, true);
         }
 
     }
@@ -237,7 +237,7 @@ public class TreemovalController {
                 System.out.println("Valid Input:" + Integer.parseInt(values[0]) + " " +Integer.parseInt(values[1]));
 
                 Forest forest = new Forest(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
-                loadForest(forest);
+                loadForest(forest, true);
 
             } else {
                 System.out.println("Invalid Input");
@@ -255,7 +255,7 @@ public class TreemovalController {
     public void runAlgorithmButtonOnAction(ActionEvent event) {
 
         Forest newForest = currentForest.runThinningAlgorithmNewForest(25);
-        loadForest(currentForest);
+        loadForest(currentForest, false);
 
     }
 
@@ -281,7 +281,7 @@ public class TreemovalController {
      */
     public void importButtonOnAction(ActionEvent event) {
         Forest forest = new Forest(getFilepath());
-        loadForest(forest);
+        loadForest(forest, true);
     }
 
     //--------------------------------------------------------------------------------------------------

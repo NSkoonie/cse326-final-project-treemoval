@@ -5,8 +5,10 @@ package com.treemoval.visualizer;
 //
 
 import com.treemoval.data.Point;
+import com.treemoval.data.Tree;
 import javafx.geometry.Bounds;
 import javafx.scene.*;
+import javafx.scene.input.PickResult;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
@@ -23,6 +25,7 @@ public class ForestScene extends SubScene {
     final Group root = new Group();
     private ForestGroup forestGroup = null;
 
+    boolean highContrastMode = false;
     AmbientLight contrastLight = new AmbientLight();
 
     private final Xform axisGroup = new Xform();
@@ -34,7 +37,7 @@ public class ForestScene extends SubScene {
     private static final double CAMERA_INITIAL_X_ANGLE = 35.0;
     private static final double CAMERA_INITIAL_Y_ANGLE = 45.0;
     private static final double CAMERA_NEAR_CLIP = 0.1;
-    private static final double CAMERA_FAR_CLIP = 10000.0;
+    private static final double CAMERA_FAR_CLIP = 200000.0;
     private static final double AXIS_LENGTH = 250.0;
     private static final double CONTROL_MULTIPLIER = 0.1;
     private static final double SHIFT_MULTIPLIER = 5.0;
@@ -66,9 +69,8 @@ public class ForestScene extends SubScene {
     //
     /**
      * initializes the ForestScene with a forest, camera, axes, and mouse and keyboard event handlers
-     * @param forestGroup the forest group to be displayed in the scene
      */
-    public void init(ForestGroup forestGroup) {
+    public void init() {
 
         setRoot(root);
 
@@ -125,9 +127,9 @@ public class ForestScene extends SubScene {
         forestGroup.getLayoutX();
         Bounds bounds = forestGroup.getBoundsInLocal();
         Point center = new Point(
-                (bounds.getMaxX() - bounds.getMinX()) / 4.0,
+                (bounds.getMaxX() - bounds.getMinX()) / 2.0,
                 0,
-                (bounds.getMaxZ() - bounds.getMinZ()) / 4.0
+                (bounds.getMaxZ() - bounds.getMinZ()) / 2.0
         );
         System.out.println("Center: ");
         System.out.println("x: " + center.x + " y: " + center.y + " z: " + center.z);
@@ -148,33 +150,49 @@ public class ForestScene extends SubScene {
      *
      * @param forestGroup the ForestGroup to be displayed within the scene
      */
-    public void setForestGroup(ForestGroup forestGroup) {
+    public void setForestGroup(ForestGroup forestGroup, boolean resetCamera) {
+
         root.getChildren().remove(this.forestGroup);
         this.forestGroup = forestGroup;
         root.getChildren().add(this.forestGroup);
 
-        resetCamera();
+        if(resetCamera) {
+            resetCamera();
+        }
+
     }
 
     //--------------------------------------------------------------------------------------------------
     // ForestScene::setContrastDisplayMode
     //
     public void setContrastDisplayMode() {
+
         setFill(Color.BLACK);
         contrastLight.setLightOn(true);
         if(forestGroup != null) {
             forestGroup.hideGround();
         }
+
     }
 
     //--------------------------------------------------------------------------------------------------
     // ForestScene::setNormalDisplayMode
     //
     public void setNormalDisplayMode() {
-        setFill(Color.LIGHTBLUE);
-        contrastLight.setLightOn(false);
-        if(forestGroup != null) {
-            forestGroup.showGround();
+
+        if (highContrastMode) {
+
+            setFill(Color.LIGHTBLUE);
+            contrastLight.setLightOn(false);
+            if (forestGroup != null) {
+                forestGroup.showGround();
+            }
+
+            camera.setFieldOfView(30.0);
+            cameraXform3.setTranslateZ(0.0);
+
+            highContrastMode = false;
+
         }
     }
 
@@ -223,6 +241,13 @@ public class ForestScene extends SubScene {
      */
     private void handleMouse() {
 
+        setOnMouseClicked(me -> {
+            PickResult res = me.getPickResult();
+            if (res.getIntersectedNode().getParent().getClass() == TreeGroup.class) {
+                ((TreeGroup) res.getIntersectedNode().getParent()).toggleRed();
+            }
+        });
+
         setOnMousePressed(me -> {
             mousePosX = me.getSceneX();
             mousePosY = me.getSceneY();
@@ -262,9 +287,27 @@ public class ForestScene extends SubScene {
                 if(rx >= 90) { rx = 90; }
 
                 if(rx > 85) {
-                    setContrastDisplayMode();
+                    if (!highContrastMode) {
+                        setContrastDisplayMode();
+                        camera.setFieldOfView(1);
+                        System.out.println("cameraZ debug:  " + cameraZ);
+                        cameraXform3.setTranslateZ(cameraZ * 30.0 - 13000.0);
+                        highContrastMode = true;
+
+                    }
+
+                    if((ry % 360) < 5 || (ry % 360) > 355) {
+                        ry = 0;
+                    }
+
                 } else {
-                    setNormalDisplayMode();
+                    if (highContrastMode) {
+                        setNormalDisplayMode();
+                        camera.setFieldOfView(30.0);
+                        System.out.println("cameraZ debug:  " + cameraZ);
+                        cameraXform3.setTranslateZ((cameraZ + 13000.0) / 30.0);
+                        highContrastMode = false;
+                    }
                 }
 
                 cameraXform.ry.setAngle(ry);
@@ -305,12 +348,8 @@ public class ForestScene extends SubScene {
     private void handleKeyboard() {
         setOnKeyPressed(event -> {
             switch (event.getCode()) {
-                case Z:
-                    cameraXform2.t.setX(0.0);
-                    cameraXform2.t.setY(0.0);
-                    camera.setTranslateZ(CAMERA_INITIAL_DISTANCE);
-                    cameraXform.ry.setAngle(CAMERA_INITIAL_Y_ANGLE);
-                    cameraXform.rx.setAngle(CAMERA_INITIAL_X_ANGLE);
+                case C:
+                    resetCamera();
                     break;
                 case X:
                     axisGroup.setVisible(!axisGroup.isVisible());

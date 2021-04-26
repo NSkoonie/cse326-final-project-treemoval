@@ -22,6 +22,7 @@ import static java.lang.Math.*;
 public class Forest {
 
     public List<Tree> trees = new ArrayList<>(); // todo should probably be private
+    private int[][] heightMap;
   
     private double minX = 0;
     private double maxX = 0;
@@ -75,11 +76,14 @@ public class Forest {
      */
     public Forest(int num_trees, int bound) {
 
+        heightMap = DSquare.generateHeightMapWithBound(new Random(), 0.05, 100, (int) Math.sqrt(bound), (int) Math.sqrt(bound), 9);
+
         for(int i = 0; i < num_trees; i++){
             Random rand = new Random();
             double x = rand.nextInt(bound) + rand.nextDouble();
             double z = rand.nextInt(bound) + rand.nextDouble();
-            double y = 0;
+            double y = heightMap[(int) sqrt(x)][(int) sqrt(z)];
+            //double y = 0;
 
             this.trees.add(new Tree(x, y, z));
         }

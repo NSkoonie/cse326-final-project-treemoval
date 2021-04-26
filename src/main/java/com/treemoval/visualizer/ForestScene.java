@@ -5,10 +5,9 @@ package com.treemoval.visualizer;
 //
 
 import com.treemoval.data.Point;
-import com.treemoval.data.Tree;
 import javafx.geometry.Bounds;
 import javafx.scene.*;
-import javafx.scene.input.PickResult;
+
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
@@ -241,13 +240,6 @@ public class ForestScene extends SubScene {
      */
     private void handleMouse() {
 
-        setOnMouseClicked(me -> {
-            PickResult res = me.getPickResult();
-            if (res.getIntersectedNode().getParent().getClass() == TreeGroup.class) {
-                ((TreeGroup) res.getIntersectedNode().getParent()).toggleRed();
-            }
-        });
-
         setOnMousePressed(me -> {
             mousePosX = me.getSceneX();
             mousePosY = me.getSceneY();
@@ -296,7 +288,7 @@ public class ForestScene extends SubScene {
 
                     }
 
-                    if((ry % 360) < 5 || (ry % 360) > 355) {
+                    if((Math.abs(ry) % 360) < 5 || (Math.abs(ry) % 360) > 355) {
                         ry = 0;
                     }
 
@@ -315,6 +307,7 @@ public class ForestScene extends SubScene {
 
             } else if (me.isSecondaryButtonDown()) {
 
+                if (highContrastMode) {return;}
                 double newZ = cameraZ + mouseDeltaX * MOUSE_SPEED * modifier * smartModifier;
                 // limit zoom in to prevent zooming through the horizon
                 if (newZ > 350) { newZ = 350; }
@@ -360,5 +353,6 @@ public class ForestScene extends SubScene {
             }
         });
     }
+
 
 }

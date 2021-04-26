@@ -1,6 +1,5 @@
 package com.treemoval.visualizer;
 
-import com.treemoval.data.Point;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.DepthTest;
 import javafx.scene.Group;
@@ -72,6 +71,8 @@ public class TreeGroup extends Group {
 
         setDepthTest(DepthTest.ENABLE);
 
+        handleMouse();
+
     }
 
     //--------------------------------------------------------------------------------------------------
@@ -115,6 +116,17 @@ public class TreeGroup extends Group {
         }
     }
 
+    //--------------------------------------------------------------------------------------------------
+    // TreeGroup::handleMouse
+    //
+
+    public void handleMouse() {
+
+        setOnMouseClicked(me -> {
+            toggleRed();
+        });
+
+    }
 
 
 }

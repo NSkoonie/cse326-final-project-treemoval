@@ -1,5 +1,6 @@
 package com.treemoval.visualizer;
 
+import com.treemoval.data.Forest;
 import com.treemoval.data.Point;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
@@ -30,13 +31,13 @@ public class GroundMesh extends MeshView {
     /**
      * Creates the GroundMesh with the specified length and width
      *
-     * @param length the length of the GroundMesh (number of points)
-     * @param width the width of the GroundMesh (number of points)
      */
-    public GroundMesh(int length, int width) {
+    public GroundMesh(Forest forest) {
 
-        this.length = length;
-        this.width = width;
+
+        this.length = (int)( forest.getMaxX() / 10.0) + 14;
+        this.width = (int)(forest.getMaxZ() / 10.0) + 14;
+        System.out.println("length: " + length + " width: " + width);
 
         generatePointArray();
 

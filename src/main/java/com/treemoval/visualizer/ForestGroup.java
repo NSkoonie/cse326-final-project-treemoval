@@ -22,11 +22,7 @@ public class ForestGroup extends Group {
 
     public ForestGroup(Forest forest) {
 
-        // build the ground
-        int xSize = (int)( forest.getMaxX() / 10.0) + 14;
-        int zSize = (int)(forest.getMaxZ() / 10.0) + 14;
-        System.out.println("xSize: " + xSize + " zSize: " + zSize);
-        groundMesh = new GroundMesh( xSize, zSize );
+        groundMesh = new GroundMesh(forest);
         getChildren().add(groundMesh);
 
         AmbientLight ambientGroundLight = new AmbientLight();

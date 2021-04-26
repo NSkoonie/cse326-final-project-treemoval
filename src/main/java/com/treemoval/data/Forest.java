@@ -5,6 +5,7 @@ import java.util.*;
 
 import static com.treemoval.data.Tags.*;
 import static java.lang.Math.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 //----------------------------------------------------------------------------------------------------------------------
 // ::Forest
@@ -71,15 +72,16 @@ public class Forest {
      * This constructor instantiates with user defined number of trees and area of forest.
      *
      * @param num_trees the number of trees in the forest
-     * @param bound the bounds for the x and y coordinates (0 - inclusive, bound - exclusive)
      */
-    public Forest(int num_trees, int bound) {
+    public Forest(int num_trees, int xBound, int zBound) {
+
+        HeightMap heightMap = new HeightMap(xBound, zBound);
 
         for(int i = 0; i < num_trees; i++){
             Random rand = new Random();
-            double x = rand.nextInt(bound) + rand.nextDouble();
-            double z = rand.nextInt(bound) + rand.nextDouble();
-            double y = 0;
+            double x = rand.nextInt(xBound) + rand.nextDouble();
+            double z = rand.nextInt(zBound) + rand.nextDouble();
+            double y = heightMap.map[(int) Math.sqrt(x)][(int) Math.sqrt(z)];
 
             this.trees.add(new Tree(x, y, z));
         }
@@ -327,8 +329,8 @@ public class Forest {
      */
     public static void main(String[] args) {
 
-        Forest forest = new Forest(1000, 1500);
-        Forest new_forest = new Forest(100, 1000);
+        Forest forest = new Forest(300, 30, 30);
+        Forest new_forest = new Forest(100, 30, 30);
 
         System.out.println("This is the first forest using the default constructor.");
         forest.listTrees();

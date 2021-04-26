@@ -65,7 +65,7 @@ public class TreemovalController {
     @FXML
     public void initialize() {
 
-        Forest forest = new Forest(0, 0);
+        Forest forest = new Forest(0, 0, 0);
         ForestGroup forestGroup = new ForestGroup(forest);
 
         forestSubScene.init();
@@ -236,7 +236,7 @@ public class TreemovalController {
             if(validInput) {
                 System.out.println("Valid Input:" + Integer.parseInt(values[0]) + " " +Integer.parseInt(values[1]));
 
-                Forest forest = new Forest(Integer.parseInt(values[0]), Integer.parseInt(values[1]));
+                Forest forest = new Forest(Integer.parseInt(values[0]), Integer.parseInt(values[1]), Integer.parseInt(values[1]));
                 loadForest(forest, true);
 
             } else {

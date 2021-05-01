@@ -82,8 +82,11 @@ public class Forest {
             double x = rand.nextInt(xBound) + rand.nextDouble();
             double z = rand.nextInt(zBound) + rand.nextDouble();
             double y = heightMap.map[(int) Math.sqrt(x)][(int) Math.sqrt(z)];
+            double height = (rand.nextInt(200) + rand.nextDouble());
+            double radius = height / 5; //just seemed reasonable, change if need be
 
-            this.trees.add(new Tree(x, y, z));
+
+            this.trees.add(new Tree(x, y, z, height, radius));
         }
         updateBounds();
     }
@@ -117,7 +120,9 @@ public class Forest {
                 double x = Double.parseDouble(dets[0]);
                 double y = Double.parseDouble(dets[1]);
                 double z = Double.parseDouble(dets[2]);
-                this.trees.add(new Tree(x, y, z));
+                double height = Double.parseDouble(dets[3]);
+                double radius = Double.parseDouble(dets[4]);
+                this.trees.add(new Tree(x, y, z, height, radius));
             }
 
             br.close();
@@ -155,7 +160,8 @@ public class Forest {
             BufferedWriter bw = new BufferedWriter(writer);
 
             for(Tree tree: this.trees){
-                line = tree.getX() + "," + tree.getY() + "," + tree.getZ();
+                line = tree.getX() + "," + tree.getY() + "," + tree.getZ() + "," + tree.getHeight() + ","
+                        + tree.getRadius();
                 bw.write(line);
                 bw.newLine();
             }
@@ -175,22 +181,38 @@ public class Forest {
     // Forest::distance
     //
     /**
-     * Calculates the euclidean distance between two trees.
+     * Calculates the euclidean distance between two trees. If the bottom of tree a is above tree b, then the closest
+     * distance between the two trees is from the bottom of tree a to the top of tree b. If some part of both trees are
+     * the same height, then the shortest distance calculation must ignore the y value's of the trees.
+     *
+     * When returning the distance, the radius of both trees is subtracted.
+     *
+     * Essentially the trees are turned into pill shaped objects, and the distance between those is calculated.
      *
      * @param a the first tree
      * @param b the second tree
-     * @return the distance between trees a and b.
+     * @return the shortest distance between trees a and b.
      */
     public static double distance(Tree a, Tree b) {
         double x1 = a.getX();
         double y1 = a.getY();
         double z1 = a.getZ();
+        double h1 = a.getHeight();
+        double r1 = a.getRadius();
 
         double x2 = b.getX();
         double y2 = b.getY();
         double z2 = b.getZ();
+        double h2 = b.getHeight();
+        double r2 = b.getRadius();
 
-        return sqrt(pow(x2-x1, 2) + pow(y2-y1, 2) + pow(z2-z1, 2));
+        if (y1 > (y2 + h2)) {//the bottom of tree a is above the top of tree b
+            return sqrt(pow(x2-x1, 2) + pow((y2+h2)-y1, 2) + pow(z2-z1, 2)) - r1 - r2; //y calculation includes height
+        } else if (y2 > (y1 + h1)) {//the bottom of tree b is above the top of tree a
+            return sqrt(pow(x2 - x1, 2) + pow(y2 - (y1 + h1), 2) + pow(z2 - z1, 2)) - r1 - r2;
+        } else { //some part of both trees are at the same height
+            return sqrt(pow(x2-x1, 2) + pow(z2-z1, 2)) - r1 - r2; //does not include y since trees overlap in y value
+        }
     }
 
     //--------------------------------------------------------------------------------------------------
@@ -280,6 +302,8 @@ public class Forest {
         int marked = 1; //# of trees marked to be cut or not
         int treeNum = this.trees.size(); //total # of trees
         Tree currentTree = this.getTree(0);
+        if (currentTree.getTag() != UNMARKED)
+            return;
         currentTree.setTag(SAFE);
 
         while (marked < treeNum) {
@@ -332,6 +356,7 @@ public class Forest {
         Forest forest = new Forest(300, 30, 30);
         Forest new_forest = new Forest(100, 30, 30);
 
+
         System.out.println("This is the first forest using the default constructor.");
         forest.listTrees();
 
@@ -340,7 +365,8 @@ public class Forest {
 
         System.out.println("The distance between the first two trees is: " +
                 distance(forest.getTree(0), forest.getTree(1)) + "\n");
-
+        forest.listTrees();
+        forest.runThinningAlgorithm(5);
         forest.runThinningAlgorithm(5);
         forest.listTrees();
 
@@ -357,7 +383,7 @@ public class Forest {
         forest.listTrees();
         System.out.println("The distance between the first two trees is: " +
                 distance(forest.getTree(0), forest.getTree(1)) + "\n");
-
+        forest.runThinningAlgorithm(5);
 
 
     }
